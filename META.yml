@@ -1,0 +1,18 @@
+---
+abstract: 'Method declarations with type constraints and no source filter'
+author:
+  - 'Florian Ragwitz'
+distribution_type: module
+generated_by: 'Module::Install version 0.77'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: MooseX-Method-Signatures
+no_index:
+  directory:
+    - inc
+    - t
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.01
