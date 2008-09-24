@@ -2,6 +2,8 @@
 abstract: 'Method declarations with type constraints and no source filter'
 author:
   - 'Florian Ragwitz'
+build_requires:
+  Test::Exception: 0
 distribution_type: module
 generated_by: 'Module::Install version 0.77'
 license: perl
@@ -13,6 +15,13 @@ no_index:
   directory:
     - inc
     - t
+requires:
+  Devel::Declare: 0
+  Moose::Util::TypeConstraints: 0
+  MooseX::Meta::Signature::Combined: 0
+  Perl6::Signature: 0
+  Scope::Guard: 0
+  Sub::Name: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.01
+version: 0.02
