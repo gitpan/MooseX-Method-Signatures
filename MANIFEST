@@ -14,6 +14,7 @@ MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
 t/00-load.t
+t/attributes.t
 t/basic.t
 t/lib/TestClass.pm
 xt/author/pod.t

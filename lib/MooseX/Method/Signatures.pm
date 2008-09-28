@@ -11,7 +11,7 @@ use Perl6::Signature;
 use Moose::Util::TypeConstraints ();
 use MooseX::Meta::Signature::Combined;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 our ($Declarator, $Offset);
 
@@ -158,8 +158,46 @@ sub inject_if_block {
     skipspace;
 
     my $linestr = Devel::Declare::get_linestr;
+    my $attrs   = '';
+
+    if (substr($linestr, $Offset, 1) eq ':') {
+        while (substr($linestr, $Offset, 1) ne '{') {
+            if (substr($linestr, $Offset, 1) eq ':') {
+                substr($linestr, $Offset, 1) = '';
+                Devel::Declare::set_linestr($linestr);
+
+                $attrs .= ' :';
+            }
+
+            skipspace;
+            $linestr = Devel::Declare::get_linestr();
+
+            if (my $len = Devel::Declare::toke_scan_word($Offset, 0)) {
+                my $name = substr($linestr, $Offset, $len);
+                substr($linestr, $Offset, $len) = '';
+                Devel::Declare::set_linestr($linestr);
+
+                $attrs .= " ${name}";
+
+                if (substr($linestr, $Offset, 1) eq '(') {
+                    my $length = Devel::Declare::toke_scan_str($Offset);
+                    my $arg    = Devel::Declare::get_lex_stuff();
+                    Devel::Declare::clear_lex_stuff();
+                    $linestr = Devel::Declare::get_linestr();
+                    substr($linestr, $Offset, $length) = '';
+                    Devel::Declare::set_linestr($linestr);
+
+                    $attrs .= "(${arg})";
+                }
+            }
+        }
+
+        $linestr = Devel::Declare::get_linestr();
+    }
+
     if (substr($linestr, $Offset, 1) eq '{') {
-        substr($linestr, $Offset+1, 0) = $inject;
+        substr($linestr, $Offset + 1, 0) = $inject;
+        substr($linestr, $Offset, 0) = "sub ${attrs}";
         Devel::Declare::set_linestr($linestr);
     }
 }
@@ -297,7 +335,7 @@ signature syntax is supported yet and some of it never will be.
 
     method foo (        $moo) # invocant is called $self and is required
     method bar ($self:  $moo) # same, but explicit
-    method baz ($class: $moo) # invocant is called $self
+    method baz ($class: $moo) # invocant is called $class
 
 =head2 Labels
 
