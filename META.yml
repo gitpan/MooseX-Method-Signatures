@@ -19,9 +19,9 @@ requires:
   Devel::Declare: 0
   Moose::Util::TypeConstraints: 0
   MooseX::Meta::Signature::Combined: 0
-  Perl6::Signature: 0
+  Perl6::Signature: 0.03
   Scope::Guard: 0
   Sub::Name: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.03
+version: 0.04
