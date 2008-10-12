@@ -16,7 +16,7 @@ no_index:
     - inc
     - t
 requires:
-  Devel::Declare: 0
+  Devel::Declare: 0.002000
   Moose::Util::TypeConstraints: 0
   MooseX::Meta::Signature::Combined: 0
   Perl6::Signature: 0.03
@@ -24,4 +24,4 @@ requires:
   Sub::Name: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.04
+version: 0.05
