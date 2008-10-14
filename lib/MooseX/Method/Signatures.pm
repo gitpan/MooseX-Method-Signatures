@@ -4,28 +4,35 @@ use warnings;
 package MooseX::Method::Signatures;
 
 use Carp qw/croak/;
-use Sub::Name;
 use Scope::Guard;
 use Devel::Declare ();
 use Perl6::Signature;
+use Moose::Meta::Class;
+use Moose::Meta::Method;
 use Moose::Util::TypeConstraints ();
 use MooseX::Meta::Signature::Combined;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 our ($Declarator, $Offset);
 
 sub import {
+    my ($self) = @_;
     my $caller = caller();
+    $self->setup_for($caller);
+}
+
+sub setup_for {
+    my ($self, $pkg) = @_;
 
     Devel::Declare->setup_for(
-        $caller,
+        $pkg,
         { method => { const => \&parser } },
     );
 
     {
         no strict 'refs';
-        *{$caller.'::method'} = sub (&) {};
+        *{$pkg.'::method'} = sub (&) {};
     }
 }
 
@@ -221,13 +228,40 @@ sub parser {
 
     inject_if_block($inject);
 
-    if (defined $name) {
-        $name = join('::', Devel::Declare::get_curstash_name(), $name)
-            unless ($name =~ /::/);
-        shadow(sub (&) { no strict 'refs'; *{$name} = subname $name => shift; });
+    my $pkg;
+    my $meth_name = defined $name
+        ? $name
+        : '__ANON__';
+
+    if ($meth_name =~ /::/) {
+        ($pkg, $meth_name) = $meth_name =~ /^(.*)::([^:]+)$/;
     }
     else {
-        shadow(sub (&) { shift });
+        $pkg = Devel::Declare::get_curstash_name();
+    }
+
+    my $create_meta_method = sub {
+        my ($code) = @_;
+        return Moose::Meta::Method->wrap(
+            body         => $code,
+            package_name => $pkg,
+            name         => $meth_name,
+        );
+    };
+
+    if (defined $name) {
+        shadow(sub (&) {
+            my ($code) = @_;
+            my $meth = $create_meta_method->($code);
+            my $meta = Moose::Meta::Class->initialize($pkg);
+            $meta->add_method($meth_name => $meth);
+            return;
+        });
+    }
+    else {
+        shadow(sub (&) {
+            return $create_meta_method->(shift);
+        });
     }
 }
 
