@@ -9,12 +9,17 @@ inc/Module/Install/Metadata.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/MooseX/Method/Signatures.pm
+lib/MooseX/Method/Signatures/Meta/Method.pm
 Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
+README
 t/00-load.t
 t/attributes.t
 t/basic.t
+t/eval.t
 t/lib/TestClass.pm
+t/signatures.t
+t/types.t
 xt/author/pod.t
