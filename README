@@ -79,6 +79,14 @@ SIGNATURE SYNTAX
         method foo (:     $affe ) # called as $obj->foo(affe => $value)
         method bar (:apan($affe)) # called as $obj->foo(apan => $value)
 
+  Traits
+        method foo (Affe $bar does trait)
+        method foo (Affe $bar is trait)
+
+    The only currently supported trait is "coerce", which will attempt to
+    coerce the value provided if it doesn't satisfy the requirements of the
+    type constraint.
+
   Complex Example
         method foo ( SomeClass $thing where { $_->can('stuff') }:
                      Str  $bar  = "apan"

@@ -15,7 +15,7 @@ use MooseX::Method::Signatures::Meta::Method;
 
 use namespace::clean -except => 'meta';
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 extends qw/Moose::Object Devel::Declare::MethodInstaller::Simple/;
 
@@ -60,6 +60,14 @@ sub param_to_spec {
     $spec{ required } = $param->required ? 1 : 0;
     $spec{ isa      } = $tc if defined $tc;
     $spec{ default  } = $param->default_value if $param->has_default_value;
+
+    if ($param->has_traits) {
+        for my $trait (@{ $param->param_traits }) {
+            next unless $trait->[1] eq 'coerce';
+            $spec{coerce} = 1;
+        }
+    }
+
     return \%spec;
 }
 
@@ -271,6 +279,15 @@ signature syntax is supported yet and some of it never will be.
 
     method foo (:     $affe ) # called as $obj->foo(affe => $value)
     method bar (:apan($affe)) # called as $obj->foo(apan => $value)
+
+=head2 Traits
+
+    method foo (Affe $bar does trait)
+    method foo (Affe $bar is trait)
+
+The only currently supported trait is C<coerce>, which will attempt to coerce
+the value provided if it doesn't satisfy the requirements of the type
+constraint.
 
 =head2 Complex Example
 
