@@ -21,5 +21,6 @@ t/basic.t
 t/eval.t
 t/lib/TestClass.pm
 t/signatures.t
+t/structured.t
 t/types.t
 xt/author/pod.t
