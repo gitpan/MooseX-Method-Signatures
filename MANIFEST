@@ -20,6 +20,8 @@ t/attributes.t
 t/basic.t
 t/eval.t
 t/lib/TestClass.pm
+t/meta.t
+t/quoted_name.t
 t/signatures.t
 t/structured.t
 t/types.t
