@@ -18,7 +18,9 @@ README
 t/00-load.t
 t/attributes.t
 t/basic.t
+t/errors.t
 t/eval.t
+t/lib/InvalidCase01.pm
 t/lib/TestClass.pm
 t/meta.t
 t/quoted_name.t

@@ -12,7 +12,7 @@ use MooseX::Method::Signatures::Meta::Method;
 
 use namespace::clean -except => 'meta';
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 extends qw/Moose::Object Devel::Declare::MethodInstaller::Simple/;
 
@@ -56,6 +56,7 @@ override strip_name => sub {
 };
 
 sub parser {
+    local $@; # Keep any previous compile errors from getting stepped on.
     my $self = shift;
     $self->init(@_);
 
@@ -93,15 +94,13 @@ sub parser {
         $self->shadow(sub {
             my ($code, $name) = @_;
 
-            my $pkg       = $compile_stash;
-            my $meth_name = defined $name ? $name : '__ANON__';
+            my $pkg = $compile_stash;
+            ($pkg, $name) = $name =~ /^(.*)::([^:]+)$/
+                if $name =~ /::/;
 
-            ($pkg, $meth_name) = $meth_name =~ /^(.*)::([^:]+)$/
-                if $meth_name =~ /::/;
-
-            my $meth = $create_meta_method->($code, $pkg, $meth_name);
+            my $meth = $create_meta_method->($code, $pkg, $name);
             my $meta = Moose::Meta::Class->initialize($pkg);
-            $meta->add_method($meth_name => $meth);
+            $meta->add_method($name => $meth);
             return;
         });
     }
@@ -205,10 +204,6 @@ signature syntax is supported yet and some of it never will be.
 
     method foo ($a , $b!, :$c!, :$d!) # required
     method bar ($a?, $b?, :$c , :$d?) # optional
-
-=for later, when mx::method::signature::combined is fixed
-    method baz ($a , $b?, :$c ,  $d?) # combined
-=back
 
 =head2 Defaults
 
@@ -354,9 +349,7 @@ of the class definition. With it, our example would becomes:
     use MooseX::Declare;
 
     class Canine with Watchdog {
-
         method bark { print "Woof!\n"; }
-
     }
 
     1;
@@ -366,7 +359,6 @@ of the class definition. With it, our example would becomes:
     use MooseX::Declare;
 
     role Watchdog {
-
         requires 'bark';
 
         method warn_intruder ( $intruder ) {
@@ -394,8 +386,6 @@ L<Method::Signatures::Simple>
 
 L<Method::Signatures>
 
-L<MooseX::Method>
-
 L<Perl6::Subs>
 
 L<Devel::Declare>
@@ -411,6 +401,8 @@ Florian Ragwitz E<lt>rafl@debian.orgE<gt>
 With contributions from:
 
 =over 4
+
+=item Hakim Cassimally E<lt>hakim.cassimally@gmail.comE<gt>
 
 =item Jonathan Scott Duff E<lt>duff@pobox.comE<gt>
 

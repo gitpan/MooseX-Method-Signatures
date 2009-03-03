@@ -192,9 +192,7 @@ BUGS, CAVEATS AND NOTES
         use MooseX::Declare;
 
         class Canine with Watchdog {
-
             method bark { print "Woof!\n"; }
-
         }
 
         1;
@@ -204,7 +202,6 @@ BUGS, CAVEATS AND NOTES
         use MooseX::Declare;
 
         role Watchdog {
-
             requires 'bark';
 
             method warn_intruder ( $intruder ) {
@@ -228,8 +225,6 @@ SEE ALSO
 
     Method::Signatures
 
-    MooseX::Method
-
     Perl6::Subs
 
     Devel::Declare
@@ -243,6 +238,7 @@ AUTHOR
 
     With contributions from:
 
+    Hakim Cassimally <hakim.cassimally@gmail.com>
     Jonathan Scott Duff <duff@pobox.com>
     Kent Fredric <kentfredric@gmail.com>
     Rhesa Rozendaal <rhesa@cpan.org>
