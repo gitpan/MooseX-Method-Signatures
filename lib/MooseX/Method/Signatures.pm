@@ -12,7 +12,7 @@ use MooseX::Method::Signatures::Meta::Method;
 
 use namespace::clean -except => 'meta';
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 extends qw/Moose::Object Devel::Declare::MethodInstaller::Simple/;
 
@@ -61,9 +61,9 @@ sub parser {
     $self->init(@_);
 
     $self->skip_declarator;
-    my $name   = $self->strip_name;
-    my $proto  = $self->strip_proto;
-    my $attrs  = $self->strip_attrs || '';
+    my $name  = $self->strip_name;
+    my $proto = $self->strip_proto;
+    my $attrs = $self->strip_attrs || '';
 
     my $method = MooseX::Method::Signatures::Meta::Method->wrap(
         signature => q{(} . ($proto || '') . q{)},
@@ -232,6 +232,14 @@ signature syntax is supported yet and some of it never will be.
 The only currently supported trait is C<coerce>, which will attempt to coerce
 the value provided if it doesn't satisfy the requirements of the type
 constraint.
+
+=head2 Placeholders
+
+    method foo ($bar, $, $baz)
+
+Sometimes you don't care about some params you're being called with. Just put
+the bare sigil instead of a full variable name into the signature to avoid an
+extra lexical variable to be created.
 
 =head2 Complex Example
 
