@@ -2,7 +2,6 @@ Changes
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
-inc/Module/Install/ExtraTests.pm
 inc/Module/Install/Fetch.pm
 inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
@@ -18,14 +17,19 @@ README
 t/00-load.t
 t/attributes.t
 t/basic.t
+t/caller.t
 t/errors.t
 t/eval.t
 t/lib/InvalidCase01.pm
+t/lib/InvalidCase02.pm
+t/lib/Redefined.pm
 t/lib/TestClass.pm
 t/meta.t
 t/placeholders.t
 t/quoted_name.t
+t/return_value.t
 t/signatures.t
+t/sigs-optional.t
 t/structured.t
 t/types.t
 xt/author/pod.t
