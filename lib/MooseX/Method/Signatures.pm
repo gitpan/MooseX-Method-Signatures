@@ -14,7 +14,7 @@ use Carp;
 
 use namespace::clean -except => 'meta';
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 extends qw/Moose::Object Devel::Declare::MethodInstaller::Simple/;
 
@@ -74,10 +74,10 @@ sub parser {
     my $self = shift;
     my $err;
 
-    # Keep any previous compile errors from getting stepped on. But report 
+    # Keep any previous compile errors from getting stepped on. But report
     # errors from inside MXMS nicely.
     {
-        local $@; 
+        local $@;
         eval { $self->_parser(@_) };
         $err = $@;
     }
@@ -102,22 +102,23 @@ sub _parser {
 
       # This might get reset later, but its where we search for exported
       # symbols at compile time
-      package_name => $compile_stash 
+      package_name => $compile_stash,
     );
     $args{return_signature} = $ret_tc if defined $ret_tc;
 
     my $method = MooseX::Method::Signatures::Meta::Method->wrap(%args);
 
-    my $after_block = q{, };
-    $after_block .= ref $name ? ${$name} : qq{q[${name}]}
-        if defined $name;
-    $after_block .= q{;};
+    my $after_block = ')';
+
+    if (defined $name) {
+        my $name_arg = q{, } . (ref $name ? ${$name} : qq{q[${name}]});
+        $after_block = $name_arg . $after_block . q{;};
+    }
 
     my $inject = $method->injectable_code;
-    $inject = $self->scope_injector_call($after_block) . $inject
-        if defined $name;
+    $inject = $self->scope_injector_call($after_block) . $inject;
 
-    $self->inject_if_block($inject, "sub ${attrs} ");
+    $self->inject_if_block($inject, "(sub ${attrs} ");
 
 
     my $create_meta_method = sub {
@@ -225,7 +226,7 @@ This is B<ALPHA SOFTWARE>. Use at your own risk. Features may change.
 
 =head1 DESCRIPTION
 
-Provides a proper method keyword, like "sub" but specificly for making methods
+Provides a proper method keyword, like "sub" but specifically for making methods
 and validating their arguments against Moose type constraints.
 
 =head1 SIGNATURE SYNTAX
@@ -289,7 +290,7 @@ extra lexical variable to be created.
 =head2 Complex Example
 
     method foo ( SomeClass $thing where { $_->can('stuff') }:
-                 Str  $bar  = "apan"
+                 Str  $bar  = "apan",
                  Int :$baz! = 42 where { $_ % 2 == 0 } where { $_ > 10 } )
 
     # the invocant is called $thing, must be an instance of SomeClass and
@@ -300,19 +301,10 @@ extra lexical variable to be created.
 
 =head1 BUGS, CAVEATS AND NOTES
 
-=head2 Non-scalar parameters
-
-Currently parameters that aren't scalars are unsupported. This is going to
-change soon.
-
 =head2 Fancy signatures
 
 L<Parse::Method::Signatures> is used to parse the signatures. However, some
 signatures that can be parsed by it aren't supported by this module (yet).
-
-=head2 Debugging
-
-This totally breaks the debugger.  Will have to wait on Devel::Declare fixes.
 
 =head2 No source filter
 
@@ -321,16 +313,23 @@ does not depend on a source filter. As such, it doesn't try to parse and
 rewrite your source code and there should be no weird side effects.
 
 Devel::Declare only effects compilation. After that, it's a normal subroutine.
-As such, for all that hairy magic, this module is surprisnigly stable.
+As such, for all that hairy magic, this module is surprisingly stable.
 
 =head2 What about regular subroutines?
 
-L<Devel::Declare> cannot yet change the way C<sub> behaves.
+L<Devel::Declare> cannot yet change the way C<sub> behaves. However, the
+L<signatures|signatures> module can. Right now it only provides very basic
+signatures, but it's extendable enough that plugging MooseX::Method::Signatures
+signatures into that should be quite possible.
 
 =head2 What about the return value?
 
-Currently there is no support for types or declaring the type of the return
-value.
+Type constraints for return values can be declared using
+
+  method foo (Int $x, Str $y) returns Bool { ... }
+
+however, this feature only works with scalar return values and is still
+considered to be experimental.
 
 =head2 Interaction with L<Moose::Role>
 
@@ -428,7 +427,7 @@ When composing a L<Moose::Role> into a class that uses
 L<MooseX::Method::Signatures>, you may get a "Subroutine redefined"
 warning. This happens when both the role and the class define a
 method/subroutine of the same name. (The way roles work, the one
-defined in the class takes precedence) To eliminate this warning,
+defined in the class takes precedence.) To eliminate this warning,
 make sure that your C<with> declaration happens after any
 method/subroutine declarations that may have the same name as a
 method/subroutine within a role.
@@ -455,11 +454,15 @@ With contributions from:
 
 =over 4
 
+=item Ash Berlin E<lt>ash@cpan.orgE<gt>
+
 =item Hakim Cassimally E<lt>hakim.cassimally@gmail.comE<gt>
 
 =item Jonathan Scott Duff E<lt>duff@pobox.comE<gt>
 
 =item Kent Fredric E<lt>kentfredric@gmail.comE<gt>
+
+=item Matt Kraai E<lt>kraai@ftbfs.orgE<gt>
 
 =item Rhesa Rozendaal E<lt>rhesa@cpan.orgE<gt>
 
@@ -468,8 +471,6 @@ With contributions from:
 =item Steffen Schwigon E<lt>ss5@renormalist.netE<gt>
 
 =item Yanick Champoux E<lt>yanick@babyl.dyndns.orgE<gt>
-
-=item Ash Berlin <ash@cpan.org>
 
 =back
 

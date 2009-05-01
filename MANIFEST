@@ -25,8 +25,10 @@ t/lib/InvalidCase01.pm
 t/lib/InvalidCase02.pm
 t/lib/Redefined.pm
 t/lib/TestClass.pm
+t/list.t
 t/meta.t
 t/placeholders.t
+t/precedence.t
 t/quoted_name.t
 t/return_value.t
 t/signatures.t
