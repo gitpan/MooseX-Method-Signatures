@@ -7,30 +7,89 @@ use Moose;
 use Devel::Declare ();
 use B::Hooks::EndOfScope;
 use Moose::Meta::Class;
+use MooseX::LazyRequire;
+use MooseX::Types::Moose qw/Str Bool CodeRef/;
 use Text::Balanced qw/extract_quotelike/;
 use MooseX::Method::Signatures::Meta::Method;
+use MooseX::Method::Signatures::Types qw/PrototypeInjections/;
 use Sub::Name;
 use Carp;
 
-use namespace::clean -except => 'meta';
+use aliased 'Devel::Declare::Context::Simple', 'ContextSimple';
 
-our $VERSION = '0.16';
+use namespace::autoclean;
 
-extends qw/Moose::Object Devel::Declare::MethodInstaller::Simple/;
+our $VERSION = '0.17';
+
+has package => (
+    is           => 'ro',
+    isa          => Str,
+    lazy_require => 1,
+);
+
+has context => (
+    is      => 'ro',
+    isa     => ContextSimple,
+    lazy    => 1,
+    builder => '_build_context',
+);
+
+has initialized_context => (
+    is      => 'ro',
+    isa     => Bool,
+    default => 0,
+);
+
+has custom_method_application => (
+    is        => 'ro',
+    isa       => CodeRef,
+    predicate => 'has_custom_method_application',
+);
+
+has prototype_injections => (
+    is        => 'ro',
+    isa       => PrototypeInjections,
+    predicate => 'has_prototype_injections',
+);
+
+sub _build_context {
+    my ($self) = @_;
+    return ContextSimple->new(into => $self->package);
+}
 
 sub import {
-    my ($class) = @_;
+    my ($class, %args) = @_;
     my $caller = caller();
-    $class->setup_for($caller);
+    $class->setup_for($caller, \%args);
 }
 
 sub setup_for {
-    my ($class, $pkg) = @_;
+    my ($class, $pkg, $args) = @_;
 
-    my $ctx = $class->new(into => $pkg);
+    # process arguments to import
+    while (my ($declarator, $injections) = each %{ $args }) {
+        my $obj = $class->new(
+            package              => $pkg,
+            prototype_injections => {
+                declarator => $declarator,
+                injections => $injections,
+            },
+        );
+
+        Devel::Declare->setup_for($pkg, {
+            $declarator => { const => sub { $obj->parser(@_) } },
+        });
+
+        {
+            no strict 'refs';
+            *{ "${pkg}::$declarator" } = sub {};
+        }
+    }
+
+    my $self = $class->new(package => $pkg);
 
     Devel::Declare->setup_for($pkg, {
-        method => { const => sub { $ctx->parser(@_) } },
+        method => { const => sub { $self->parser(@_) } },
     });
 
     {
@@ -41,13 +100,14 @@ sub setup_for {
     return;
 }
 
-override strip_name => sub {
+sub strip_name {
     my ($self) = @_;
-    my $ret = super;
+    my $ctx = $self->context;
+    my $ret = $ctx->strip_name;
     return $ret if defined $ret;
 
-    my $line = $self->get_linestr;
-    my $offset = $self->offset;
+    my $line = $ctx->get_linestr;
+    my $offset = $ctx->offset;
     local $@;
     my ($str) = extract_quotelike(substr($line, $offset));
     return unless defined $str;
@@ -56,18 +116,61 @@ override strip_name => sub {
     die $@ if $@;
 
     substr($line, $offset, length $str) = '';
-    $self->set_linestr($line);
+    $ctx->set_linestr($line);
 
     return \$str;
-};
+}
+
+sub strip_traits {
+    my ($self) = @_;
+
+    my $ctx = $self->context;
+    my $linestr = $ctx->get_linestr;
+
+    unless (substr($linestr, $ctx->offset, 2) eq 'is') {
+        # No 'is' means no traits
+        return;
+    }
+
+    my @traits;
+
+    while (substr($linestr, $ctx->offset, 2) eq 'is') {
+        # Eat the 'is' so we can call strip_names_and_args
+        substr($linestr, $ctx->offset, 2) = '';
+        $ctx->set_linestr($linestr);
+        push @traits, @{ $ctx->strip_names_and_args };
+        # Get the current linestr so that the loop can look for more 'is'
+        $ctx->skipspace;
+        $linestr = $ctx->get_linestr;
+    }
+
+    confess "expected traits after 'is', found nothing"
+        unless scalar(@traits);
+
+    # Let's check to make sure these traits aren't aliased locally
+    for my $t (@traits) {
+        my $class = $ctx->get_curstash_name;
+        my $meta = Class::MOP::class_of($class) || Moose::Meta::Class->initialize($class);
+        my $func = $meta->get_package_symbol('&' . $t->[0]);
+        next unless $func;
+
+        my $proto = prototype $func;
+        next if !defined $proto || length $proto;
+
+        $t->[0] = $func->();
+    }
+
+    return \@traits;
+}
 
 sub strip_return_type_constraint {
     my ($self) = @_;
-    my $returns = $self->strip_name;
+    my $ctx = $self->context;
+    my $returns = $ctx->strip_name;
     return unless defined $returns;
     confess "expected 'returns', found '${returns}'"
         unless $returns eq 'returns';
-    return $self->strip_proto;
+    return $ctx->strip_proto;
 }
 
 sub parser {
@@ -87,28 +190,42 @@ sub parser {
 
 sub _parser {
     my $self = shift;
-    $self->init(@_);
+    my $ctx = $self->context;
+    $ctx->init(@_) unless $self->initialized_context;
 
-    $self->skip_declarator;
+    $ctx->skip_declarator;
     my $name   = $self->strip_name;
-    my $proto  = $self->strip_proto;
-    my $attrs  = $self->strip_attrs || '';
+    my $proto  = $ctx->strip_proto;
+    my $attrs  = $ctx->strip_attrs || '';
+    my $traits = $self->strip_traits;
     my $ret_tc = $self->strip_return_type_constraint;
 
-    my $compile_stash = $self->get_curstash_name;
+    my $compile_stash = $ctx->get_curstash_name;
 
     my %args = (
-      signature => q{(} . ($proto || '') . q{)},
-
       # This might get reset later, but its where we search for exported
       # symbols at compile time
       package_name => $compile_stash,
     );
-    $args{return_signature} = $ret_tc if defined $ret_tc;
+    $args{ signature        } = qq{($proto)} if defined $proto;
+    $args{ traits           } = $traits      if $traits;
+    $args{ return_signature } = $ret_tc      if defined $ret_tc;
+
+    if ($self->has_prototype_injections) {
+        confess('Configured declarator does not match context declarator')
+            if $ctx->declarator ne $self->prototype_injections->{declarator};
+        $args{prototype_injections} = $self->prototype_injections->{injections};
+    }
 
     my $method = MooseX::Method::Signatures::Meta::Method->wrap(%args);
 
     my $after_block = ')';
+
+    if ($traits) {
+        if (my @trait_args = grep { defined } map { $_->[1] } @{ $traits }) {
+            $after_block = q{, } . join(q{,} => @trait_args) . $after_block;
+        }
+    }
 
     if (defined $name) {
         my $name_arg = q{, } . (ref $name ? ${$name} : qq{q[${name}]});
@@ -118,47 +235,57 @@ sub _parser {
     my $inject = $method->injectable_code;
     $inject = $self->scope_injector_call($after_block) . $inject;
 
-    $self->inject_if_block($inject, "(sub ${attrs} ");
-
+    $ctx->inject_if_block($inject, "(sub ${attrs} ");
 
     my $create_meta_method = sub {
-        my ($code, $pkg, $meth_name) = @_;
+        my ($code, $pkg, $meth_name, @args) = @_;
         subname $pkg . "::" .$meth_name, $code;
         $method->_set_actual_body($code);
         $method->_set_package_name($pkg);
         $method->_set_name($meth_name);
+        $method->_adopt_trait_args(@args);
         return $method;
     };
 
     if (defined $name) {
-        $self->shadow(sub {
-            my ($code, $name) = @_;
+        my $apply = $self->has_custom_method_application
+            ? $self->custom_method_application
+            : sub {
+                my ($meta, $name, $method) = @_;
+                $meta->add_method($name => $method);
+            };
+
+        $ctx->shadow(sub {
+            my ($code, $name, @args) = @_;
 
             my $pkg = $compile_stash;
             ($pkg, $name) = $name =~ /^(.*)::([^:]+)$/
                 if $name =~ /::/;
 
-            my $meth = $create_meta_method->($code, $pkg, $name);
+            my $meth = $create_meta_method->($code, $pkg, $name, @args);
             my $meta = Moose::Meta::Class->initialize($pkg);
             my $meta_meth;
+
             if (warnings::enabled("redefine") &&
                 ($meta_meth = $meta->get_method($name)) &&
                 $meta_meth->isa('MooseX::Method::Signatures::Meta::Method')) {
-              warnings::warn("redefine", "Method $name redefined on package $pkg");
+                warnings::warn("redefine", "Method $name redefined on package $pkg");
             }
-            $meta->add_method($name => $meth);
+
+            $meta->$apply($name, $meth);
             return;
         });
     }
     else {
-        $self->shadow(sub {
-            return $create_meta_method->(shift, $compile_stash, '__ANON__');
+        $ctx->shadow(sub {
+            return $create_meta_method->(shift, $compile_stash, '__ANON__', @_);
         });
     }
 }
 
 sub scope_injector_call {
     my ($self, $code) = @_;
+    $code =~ s/'/\\'/g; # we're generating code that's quoted with single quotes
     return qq[BEGIN { ${\ref $self}->inject_scope('${code}') }];
 }
 
@@ -295,7 +422,7 @@ extra lexical variable to be created.
 
     # the invocant is called $thing, must be an instance of SomeClass and
            has to implement a 'stuff' method
-    # $bar is positional, required, must be a string and defaults to "affe"
+    # $bar is positional, required, must be a string and defaults to "apan"
     # $baz is named, required, must be an integer, defaults to 42 and needs
     #      to be even and greater than 10
 
@@ -326,7 +453,7 @@ signatures into that should be quite possible.
 
 Type constraints for return values can be declared using
 
-  method foo (Int $x, Str $y) returns Bool { ... }
+  method foo (Int $x, Str $y) returns (Bool) { ... }
 
 however, this feature only works with scalar return values and is still
 considered to be experimental.
@@ -456,9 +583,13 @@ With contributions from:
 
 =item Ash Berlin E<lt>ash@cpan.orgE<gt>
 
+=item Cory Watson E<lt>gphat@cpan.orgE<gt>
+
 =item Hakim Cassimally E<lt>hakim.cassimally@gmail.comE<gt>
 
 =item Jonathan Scott Duff E<lt>duff@pobox.comE<gt>
+
+=item Justin Hunter E<lt>justin.d.hunter@gmail.comE<gt>
 
 =item Kent Fredric E<lt>kentfredric@gmail.comE<gt>
 
@@ -471,6 +602,8 @@ With contributions from:
 =item Steffen Schwigon E<lt>ss5@renormalist.netE<gt>
 
 =item Yanick Champoux E<lt>yanick@babyl.dyndns.orgE<gt>
+
+=item Nicholas Perez E<lt>nperez@cpan.orgE<gt>
 
 =back
 

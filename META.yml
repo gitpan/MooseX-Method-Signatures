@@ -8,7 +8,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.85'
+generated_by: 'Module::Install version 0.91'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -18,24 +18,26 @@ no_index:
   directory:
     - inc
     - t
+    - xt
 requires:
   B::Hooks::EndOfScope: 0.07
   Context::Preserve: 0
-  Devel::Declare: 0.003004
+  Devel::Declare: 0.005009
   Moose: 0.63
   Moose::Util::TypeConstraints: 0
+  MooseX::LazyRequire: 0
   MooseX::Meta::TypeConstraint::ForceCoercion: 0
   MooseX::Types: 0.09
   MooseX::Types::Moose: 0
   MooseX::Types::Structured: 0.12
-  Parse::Method::Signatures: 1.003004
+  Parse::Method::Signatures: 1.003010
   Sub::Name: 0
   Task::Weaken: 0
   Text::Balanced: 0
   aliased: 0
-  namespace::clean: 0
+  namespace::autoclean: 0
 resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=MooseX-Method-Signatures
   license: http://dev.perl.org/licenses/
   repository: git://github.com/rafl/moosex-method-signatures.git
-version: 0.16
+version: 0.17

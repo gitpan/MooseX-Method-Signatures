@@ -101,7 +101,7 @@ SIGNATURE SYNTAX
 
         # the invocant is called $thing, must be an instance of SomeClass and
                has to implement a 'stuff' method
-        # $bar is positional, required, must be a string and defaults to "affe"
+        # $bar is positional, required, must be a string and defaults to "apan"
         # $baz is named, required, must be an integer, defaults to 42 and needs
         #      to be even and greater than 10
 
@@ -129,7 +129,7 @@ BUGS, CAVEATS AND NOTES
   What about the return value?
     Type constraints for return values can be declared using
 
-      method foo (Int $x, Str $y) returns Bool { ... }
+      method foo (Int $x, Str $y) returns (Bool) { ... }
 
     however, this feature only works with scalar return values and is still
     considered to be experimental.
@@ -246,14 +246,17 @@ AUTHOR
     With contributions from:
 
     Ash Berlin <ash@cpan.org>
+    Cory Watson <gphat@cpan.org>
     Hakim Cassimally <hakim.cassimally@gmail.com>
     Jonathan Scott Duff <duff@pobox.com>
+    Justin Hunter <justin.d.hunter@gmail.com>
     Kent Fredric <kentfredric@gmail.com>
     Matt Kraai <kraai@ftbfs.org>
     Rhesa Rozendaal <rhesa@cpan.org>
     Ricardo SIGNES <rjbs@cpan.org>
     Steffen Schwigon <ss5@renormalist.net>
     Yanick Champoux <yanick@babyl.dyndns.org>
+    Nicholas Perez <nperez@cpan.org>
 
 COPYRIGHT AND LICENSE
     Copyright (c) 2008, 2009 Florian Ragwitz

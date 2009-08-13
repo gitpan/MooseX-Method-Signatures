@@ -11,16 +11,18 @@ use MooseX::Meta::TypeConstraint::ForceCoercion;
 use MooseX::Types::Util qw/has_available_type_export/;
 use MooseX::Types::Structured qw/Tuple Dict Optional slurpy/;
 use MooseX::Types::Moose qw/ArrayRef Str Maybe Object Defined CodeRef Bool/;
+use MooseX::Method::Signatures::Types qw/Injections Params/;
 use aliased 'Parse::Method::Signatures::Param::Named';
 use aliased 'Parse::Method::Signatures::Param::Placeholder';
 
-use namespace::clean -except => 'meta';
+use namespace::autoclean;
 
 extends 'Moose::Meta::Method';
 
 has signature => (
     is       => 'ro',
-    isa      => Maybe[Str],
+    isa      => Str,
+    default  => '(@)',
     required => 1,
 );
 
@@ -91,6 +93,19 @@ has actual_body => (
     predicate => '_has_actual_body',
 );
 
+has prototype_injections => (
+    is          => 'rw',
+    isa         => Injections,
+    trigger     => \&_parse_prototype_injections
+);
+
+has _parsed_prototype_injections => (
+    is          => 'ro',
+    isa         => Params,
+    predicate   => '_has_parsed_prototype_injections',
+    writer      => '_set_parsed_prototype_injections',
+);
+
 before actual_body => sub {
     my ($self) = @_;
     confess "method doesn't have an actual body yet"
@@ -139,10 +154,25 @@ sub wrap {
             @_ = $self->validate(\@_);
             $actual_body ||= $self->actual_body;
             goto &{ $actual_body };
-        }
+        };
     }
 
-    $self = $class->_new(%args, body => $to_wrap );
+    if ($args{traits}) {
+        my @traits = map {
+            Class::MOP::load_class($_->[0]); $_->[0];
+        } @{ $args{traits} };
+
+        my $meta = Moose::Meta::Class->create_anon_class(
+            superclasses => [ $class  ],
+            roles        => [ @traits ],
+            cache        => 1,
+        );
+        $meta->add_method(meta => sub { $meta });
+
+        $class = $meta->name;
+    }
+
+    $self = $class->_new(%args, body => $to_wrap);
 
     # Vivify the type constraints so TC lookups happen before namespace::clean
     # removes them
@@ -153,7 +183,24 @@ sub wrap {
         if $self->{associated_metaclass};
 
     return $self;
-};
+}
+
+# ok, this is a little lame, as you can't really rely on the normal attribute
+# initialisation within your traits. I suppose we should create the metamethod
+# subclass with its traits here and pass the trait parameters directly to its
+# constructor, throwing away the current "compile-time metamethod" and
+# returning the one that'll be used at runtime. that'd also allow us to get rid
+# of some hacks we currently have, because the metamethod instance persists
+# from compile time to runtme (see _set_name, _set_package_name, etc).
+sub _adopt_trait_args {
+    my ($self, %args) = @_;
+    while (my ($name, $val) = each %args) {
+        my $attr = $self->meta->get_attribute($name);
+        confess qq{trying to set non-existant metamethod attribute $name}
+            unless $attr;
+        $attr->set_initial_value($self, $val);
+    }
+}
 
 sub _build__parsed_signature {
     my ($self) = @_;
@@ -226,11 +273,37 @@ sub _param_to_spec {
     return \%spec;
 }
 
+sub _parse_prototype_injections {
+    my $self = shift;
+
+    my @params;
+    for my $inject (@{ $self->prototype_injections }) {
+        my $param;
+        eval {
+            $param = Parse::Method::Signatures->param($inject);
+        };
+
+        confess "There was a problem parsing the prototype injection '$inject': $@"
+            if $@ || !defined $param;
+
+        push @params, $param;
+    }
+
+    my @return = reverse @params;
+    $self->_set_parsed_prototype_injections(\@return);
+}
+
 sub _build__lexicals {
     my ($self) = @_;
     my ($sig) = $self->_parsed_signature;
 
     my @lexicals;
+
+    if ($self->_has_parsed_prototype_injections) {
+        push @lexicals, $_->variable_name
+            for @{ $self->_parsed_prototype_injections };
+    }
+
     push @lexicals, $sig->has_invocant
         ? $sig->invocant->variable_name
         : '$self';
@@ -256,6 +329,11 @@ sub _build__positional_args {
     my $sig = $self->_parsed_signature;
 
     my @positional;
+    if ($self->_has_parsed_prototype_injections) {
+        push @positional, map {
+            $self->_param_to_spec($_)
+        } @{ $self->_parsed_prototype_injections };
+    }
 
     push @positional, $sig->has_invocant
         ? $self->_param_to_spec($sig->invocant)
