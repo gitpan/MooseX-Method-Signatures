@@ -40,4 +40,4 @@ resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=MooseX-Method-Signatures
   license: http://dev.perl.org/licenses/
   repository: git://github.com/rafl/moosex-method-signatures.git
-version: 0.18
+version: 0.19

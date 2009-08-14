@@ -19,7 +19,7 @@ use aliased 'Devel::Declare::Context::Simple', 'ContextSimple';
 
 use namespace::autoclean;
 
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 has package => (
     is           => 'ro',
@@ -252,6 +252,12 @@ sub _parser {
             ? $self->custom_method_application
             : sub {
                 my ($meta, $name, $method) = @_;
+
+                if (warnings::enabled("redefine") && (my $meta_meth = $meta->get_method($name))) {
+                    warnings::warn("redefine", "Method $name redefined on package ${ \$meta->name }")
+                        if $meta_meth->isa('MooseX::Method::Signatures::Meta::Method');
+                }
+
                 $meta->add_method($name => $method);
             };
 
@@ -264,13 +270,6 @@ sub _parser {
 
             my $meth = $create_meta_method->($code, $pkg, $name, @args);
             my $meta = Moose::Meta::Class->initialize($pkg);
-            my $meta_meth;
-
-            if (warnings::enabled("redefine") &&
-                ($meta_meth = $meta->get_method($name)) &&
-                $meta_meth->isa('MooseX::Method::Signatures::Meta::Method')) {
-                warnings::warn("redefine", "Method $name redefined on package $pkg");
-            }
 
             $meta->$apply($name, $meth);
             return;
