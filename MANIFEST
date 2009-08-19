@@ -26,6 +26,7 @@ t/lib/InvalidCase01.pm
 t/lib/InvalidCase02.pm
 t/lib/MXMSLabeled.pm
 t/lib/MXMSMoody.pm
+t/lib/My/Annoyingly/Long/Name/Space.pm
 t/lib/Redefined.pm
 t/lib/TestClass.pm
 t/lib/TestClassTrait.pm
@@ -40,5 +41,6 @@ t/signatures.t
 t/sigs-optional.t
 t/structured.t
 t/traits.t
+t/type_alias.t
 t/types.t
 xt/author/pod.t
