@@ -19,6 +19,7 @@ t/00-load.t
 t/attributes.t
 t/basic.t
 t/caller.t
+t/closure.t
 t/declarators.t
 t/errors.t
 t/eval.t
