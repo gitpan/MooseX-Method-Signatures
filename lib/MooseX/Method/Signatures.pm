@@ -19,7 +19,7 @@ use aliased 'Devel::Declare::Context::Simple', 'ContextSimple';
 
 use namespace::autoclean;
 
-our $VERSION = '0.23';
+our $VERSION = '0.24';
 
 has package => (
     is            => 'ro',
@@ -240,7 +240,7 @@ sub _parser {
     my $create_meta_method = sub {
         my ($code, $pkg, $meth_name, @args) = @_;
         subname $pkg . "::" .$meth_name, $code;
-        return $proto_method->clone(
+        return $proto_method->reify(
             actual_body  => $code,
             package_name => $pkg,
             name         => $meth_name,
