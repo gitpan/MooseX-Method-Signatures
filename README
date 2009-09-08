@@ -39,9 +39,6 @@ SYNOPSIS
 
         $foo->greet;                                    # Will fail.
 
-DISCLAIMER
-    This is ALPHA SOFTWARE. Use at your own risk. Features may change.
-
 DESCRIPTION
     Provides a proper method keyword, like "sub" but specifically for making
     methods and validating their arguments against Moose type constraints.
@@ -106,6 +103,10 @@ SIGNATURE SYNTAX
         #      to be even and greater than 10
 
 BUGS, CAVEATS AND NOTES
+    This module is as stable now, but this is not to say that it is entirely
+    bug free. If you notice any odd behaviour (messages not being as good as
+    they could for example) then please raise a bug.
+
   Fancy signatures
     Parse::Method::Signatures is used to parse the signatures. However, some
     signatures that can be parsed by it aren't supported by this module
@@ -228,6 +229,8 @@ BUGS, CAVEATS AND NOTES
     role.
 
 SEE ALSO
+    MooseX::Declare
+
     Method::Signatures::Simple
 
     Method::Signatures

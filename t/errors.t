@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 6;
+use Test::More;
 use Test::Exception;
 
 use FindBin;
@@ -13,13 +13,6 @@ like($@,
      "Sane error message for syntax error");
 
 
-eval "use InvalidCase02;";
-ok($@, "Got an error");
-like($@, 
-     qr/'SomeRandomTCThatDoesntExist' could not be parsed to a type constraint .*? at .*?\bInvalidCase02.pm line 5$/m,
-     "Sane error message for invalid TC");
-
-
 {
   my $warnings = "";
   local $SIG{__WARN__} = sub { $warnings .= $_[0] };
@@ -29,3 +22,5 @@ like($@,
   like($warnings, qr/^Method meth1 redefined on package main at .*?\bRedefined.pm line 9$/,
        "Redefined method warning");
 }
+
+done_testing;
