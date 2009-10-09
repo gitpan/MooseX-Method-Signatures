@@ -2,6 +2,7 @@ Changes
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
+inc/Module/Install/ExtraTests.pm
 inc/Module/Install/Fetch.pm
 inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
@@ -33,6 +34,7 @@ t/lib/TestClass.pm
 t/lib/TestClassTrait.pm
 t/list.t
 t/meta.t
+t/named_defaults.t
 t/no_signature.t
 t/placeholders.t
 t/precedence.t
