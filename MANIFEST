@@ -43,6 +43,7 @@ t/return_value.t
 t/signatures.t
 t/sigs-optional.t
 t/structured.t
+t/too_many_args.t
 t/traits.t
 t/type_alias.t
 t/types.t

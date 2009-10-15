@@ -407,10 +407,7 @@ sub _build_type_constraint {
                 $i++;
             }
 
-            if ($self->_has_slurpy_positional) {
-                push @positional_args, @{ $_ }[$i .. $#{ $_ }];
-            }
-            elsif (%named) {
+            if (%named) {
                 my %rest = @{ $_ }[$i .. $#{ $_ }];
                 while (my ($key, $spec) = each %named) {
                     if (exists $rest{$key}) {
@@ -424,6 +421,9 @@ sub _build_type_constraint {
                 }
 
                 @named_args{keys %rest} = values %rest;
+            }
+            elsif ($#{ $_ } >= $i) {
+                push @positional_args, @{ $_ }[$i .. $#{ $_ }];
             }
 
             return [\@positional_args, \%named_args];
