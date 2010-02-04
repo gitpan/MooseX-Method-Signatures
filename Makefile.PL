@@ -16,14 +16,14 @@ requires 'MooseX::LazyRequire' => '0.04';
 requires 'MooseX::Meta::TypeConstraint::ForceCoercion';
 requires 'MooseX::Types' => '0.19';
 requires 'MooseX::Types::Moose';
-requires 'MooseX::Types::Structured' => '0.12';
+requires 'MooseX::Types::Structured' => '0.20';
 requires 'namespace::autoclean';
 requires 'Sub::Name';
 requires 'Task::Weaken';
 requires 'Text::Balanced';
 
 test_requires 'Test::Exception';
-test_requires 'Test::More' => 0.88;
+test_requires 'Test::More' => 0.89;
 
 repository 'git://github.com/rafl/moosex-method-signatures.git';
 bugtracker 'http://rt.cpan.org/Public/Dist/Display.html?Name=MooseX-Method-Signatures';
