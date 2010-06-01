@@ -19,7 +19,7 @@ use aliased 'Devel::Declare::Context::Simple', 'ContextSimple';
 
 use namespace::autoclean;
 
-our $VERSION = '0.30';
+our $VERSION = '0.31';
 
 has package => (
     is            => 'ro',
@@ -128,16 +128,25 @@ sub strip_traits {
     my $ctx = $self->context;
     my $linestr = $ctx->get_linestr;
 
-    unless (substr($linestr, $ctx->offset, 2) eq 'is') {
+    unless (substr($linestr, $ctx->offset, 2) eq 'is' ||
+            substr($linestr, $ctx->offset, 4) eq 'does') {
         # No 'is' means no traits
         return;
     }
 
     my @traits;
 
-    while (substr($linestr, $ctx->offset, 2) eq 'is') {
-        # Eat the 'is' so we can call strip_names_and_args
-        substr($linestr, $ctx->offset, 2) = '';
+    while (1) {
+        if (substr($linestr, $ctx->offset, 2) eq 'is') {
+            # Eat the 'is' so we can call strip_names_and_args
+            substr($linestr, $ctx->offset, 2) = '';
+        } elsif (substr($linestr, $ctx->offset, 4) eq 'does') {
+            # Eat the 'does' so we can call strip_names_and_args
+            substr($linestr, $ctx->offset, 4) = '';
+        } else {
+            last;
+        }
+
         $ctx->set_linestr($linestr);
         push @traits, @{ $ctx->strip_names_and_args };
         # Get the current linestr so that the loop can look for more 'is'
@@ -145,7 +154,7 @@ sub strip_traits {
         $linestr = $ctx->get_linestr;
     }
 
-    confess "expected traits after 'is', found nothing"
+    confess "expected traits after 'is' or 'does', found nothing"
         unless scalar(@traits);
 
     # Let's check to make sure these traits aren't aliased locally
@@ -189,6 +198,7 @@ sub parser {
     die $err if $err;
 }
 
+my $anon_counter = 1;
 sub _parser {
     my $self = shift;
     my $ctx = $self->context;
@@ -212,13 +222,35 @@ sub _parser {
     $args{ traits           } = $traits      if $traits;
     $args{ return_signature } = $ret_tc      if defined $ret_tc;
 
+    # Class::MOP::Method requires a name
+    $args{ name             } = $name || '__ANON__'.($anon_counter++).'__';
+
     if ($self->has_prototype_injections) {
         confess('Configured declarator does not match context declarator')
             if $ctx->declarator ne $self->prototype_injections->{declarator};
         $args{prototype_injections} = $self->prototype_injections->{injections};
     }
 
-    my $proto_method = MooseX::Method::Signatures::Meta::Method->wrap(%args);
+    my $meth_class = 'MooseX::Method::Signatures::Meta::Method';
+    if ($args{traits}) {
+        my @traits = ();
+        foreach my $t (@{$args{traits}}) {
+            Class::MOP::load_class($t->[0]);
+            if ($t->[1]) {
+                %args = (%args, eval $t->[1]);
+            };
+            push @traits, $t->[0];
+        }
+        my $meta = Moose::Meta::Class->create_anon_class(
+            superclasses => [ $meth_class  ],
+            roles        => [ @traits ],
+            cache        => 1,
+        );
+        $meth_class = $meta->name;
+        delete $args{traits};
+    }
+
+    my $proto_method = $meth_class->wrap(sub { }, %args);
 
     my $after_block = ')';
 
@@ -241,11 +273,17 @@ sub _parser {
     my $create_meta_method = sub {
         my ($code, $pkg, $meth_name, @args) = @_;
         subname $pkg . "::" .$meth_name, $code;
-        return $proto_method->reify(
-            actual_body  => $code,
-            package_name => $pkg,
-            name         => $meth_name,
-            trait_args   => \@args,
+
+        # we want to reinitialize with all the args,
+        # so we give the opportunity for traits to wrap the correct
+        # closure.
+        my %other_args = %{$proto_method};
+        delete $other_args{body};
+        delete $other_args{actual_body};
+
+        my $ret = $meth_class->wrap(
+            $code,
+            %other_args, @args
         );
     };
 

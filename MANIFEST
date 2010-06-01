@@ -32,8 +32,10 @@ t/lib/My/Annoyingly/Long/Name/Space.pm
 t/lib/Redefined.pm
 t/lib/TestClass.pm
 t/lib/TestClassTrait.pm
+t/lib/TestClassWithMxTypes.pm
 t/list.t
 t/meta.t
+t/method-trait.t
 t/named_defaults.t
 t/no_signature.t
 t/placeholders.t
@@ -43,8 +45,12 @@ t/return_value.t
 t/signatures.t
 t/sigs-optional.t
 t/structured.t
+t/synopsis.t
 t/too_many_args.t
 t/traits.t
 t/type_alias.t
 t/types.t
+t/undef_method_arg.t
+t/where.t
 xt/author/pod.t
+xt/author/transactional-authorized.t

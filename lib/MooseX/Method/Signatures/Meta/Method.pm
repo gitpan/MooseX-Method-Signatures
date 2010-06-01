@@ -149,32 +149,13 @@ sub _wrapped_body {
 
 }
 
-sub wrap {
-    my ($class, %args) = @_;
-
-    $args{actual_body} = delete $args{body}
-        if exists $args{body};
-
+around wrap => sub {
+    my $orig = shift;
     my $self;
-    my $to_wrap = $class->_wrapped_body(\$self, %args);
+    my ($class, $code, %args) = @_;
 
-
-    if ($args{traits}) {
-        my @traits = map {
-            Class::MOP::load_class($_->[0]); $_->[0];
-        } @{ $args{traits} };
-
-        my $meta = Moose::Meta::Class->create_anon_class(
-            superclasses => [ $class  ],
-            roles        => [ @traits ],
-            cache        => 1,
-        );
-        $meta->add_method(meta => sub { $meta });
-
-        $class = $meta->name;
-    }
-
-    $self = $class->_new(%args, body => $to_wrap);
+    my $wrapped = $class->_wrapped_body(\$self, %args);
+    $self = $class->$orig($wrapped, %args, actual_body => $code);
 
     # Vivify the type constraints so TC lookups happen before namespace::clean
     # removes them
@@ -185,24 +166,7 @@ sub wrap {
         if $self->{associated_metaclass};
 
     return $self;
-}
-
-sub reify {
-    my ($self, %params) = @_;
-    my $trait_args = delete $params{trait_args};
-
-    my $clone;
-    $clone = $self->meta->clone_object($self,
-        %params, @{ $trait_args || [] },
-        body => $self->_wrapped_body(\$clone,
-            ($self->has_return_signature
-              ? (return_signature => $self->return_signature)
-              : ()),
-        ),
-    );
-
-    return $clone;
-}
+};
 
 sub _build_parsed_signature {
     my ($self) = @_;
@@ -398,15 +362,19 @@ sub _build_type_constraint {
 
             my $i = 0;
             for my $param (@{ $positional }) {
-                push @positional_args,
+                push @positional_args, map { $coerce_param->($param, $_) }
                     $#{ $_ } < $i
                         ? (exists $param->{default} ? eval $param->{default} : ())
-                        : $coerce_param->($param, $_->[$i]);
+                        : $_->[$i];
                 $i++;
             }
 
             if (%named) {
-                my %rest = @{ $_ }[$i .. $#{ $_ }];
+                my @rest = @{ $_ }[$i .. $#{ $_ }];
+                confess "Expected named arguments but didn't find an even-sized list"
+                    unless @rest % 2 == 0;
+                my %rest = @rest;
+
                 while (my ($key, $spec) = each %named) {
                     if (exists $rest{$key}) {
                         $named_args{$key} = $coerce_param->($spec, delete $rest{$key});
@@ -414,7 +382,7 @@ sub _build_type_constraint {
                     }
 
                     if (exists $spec->{default}) {
-                        $named_args{$key} = eval $spec->{default};
+                        $named_args{$key} = $coerce_param->($spec, eval $spec->{default});
                     }
                 }
 
