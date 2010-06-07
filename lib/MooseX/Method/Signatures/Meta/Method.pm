@@ -161,7 +161,7 @@ around wrap => sub {
     }
 
     my $wrapped = $class->_wrapped_body(\$self, %args);
-    $self = $class->$orig($wrapped, %args, actual_body => $code);
+    $self = $class->$orig($wrapped, %args, $code ? (actual_body => $code) : ());
 
     # Vivify the type constraints so TC lookups happen before namespace::clean
     # removes them
@@ -173,6 +173,16 @@ around wrap => sub {
 
     return $self;
 };
+
+sub reify {
+    my $self = shift;
+
+    my %other_args = %{$self};
+    delete $other_args{body};
+    delete $other_args{actual_body};
+
+    return $self->meta->name->wrap($self->body, %other_args, @_);
+}
 
 sub _build_parsed_signature {
     my ($self) = @_;
