@@ -2,13 +2,20 @@ use strict;
 use warnings;
 
 package MooseX::Method::Signatures;
+BEGIN {
+  $MooseX::Method::Signatures::AUTHORITY = 'cpan:FLORA';
+}
+BEGIN {
+  $MooseX::Method::Signatures::VERSION = '0.35';
+}
+# ABSTRACT: Method declarations with type constraints and no source filter
 
-use Moose;
-use Devel::Declare ();
-use B::Hooks::EndOfScope;
+use Moose 0.89;
+use Devel::Declare 0.005011 ();
+use B::Hooks::EndOfScope 0.07;
 use Moose::Meta::Class;
-use MooseX::LazyRequire;
-use MooseX::Types::Moose qw/Str Bool CodeRef/;
+use MooseX::LazyRequire 0.04;
+use MooseX::Types::Moose 0.19 qw/Str Bool CodeRef/;
 use Text::Balanced qw/extract_quotelike/;
 use MooseX::Method::Signatures::Meta::Method;
 use MooseX::Method::Signatures::Types qw/PrototypeInjections/;
@@ -18,8 +25,6 @@ use Carp;
 use aliased 'Devel::Declare::Context::Simple', 'ContextSimple';
 
 use namespace::autoclean;
-
-our $VERSION = '0.34';
 
 has package => (
     is            => 'ro',
@@ -343,7 +348,12 @@ __PACKAGE__->meta->make_immutable;
 
 1;
 
+
 __END__
+=pod
+
+=encoding utf-8
+
 =head1 NAME
 
 MooseX::Method::Signatures - Method declarations with type constraints and no source filter
@@ -540,7 +550,6 @@ For example, the following will not work:
 
     1;
 
-
 A workaround for this problem is to use C<with> only
 after the methods have been defined.  To take our previous
 example, B<Canine> could be reworked thus:
@@ -556,11 +565,9 @@ example, B<Canine> could be reworked thus:
 
     1;
 
-
 A better solution is to use L<MooseX::Declare> instead of plain
 L<MooseX::Method::Signatures>. It defers application of roles until the end
 of the class definition. With it, our example would becomes:
-
 
     # in file Canine.pm
 
@@ -585,7 +592,6 @@ of the class definition. With it, our example would becomes:
     }
 
     1;
-
 
 =head3 I<Subroutine redefined> warnings
 
@@ -614,52 +620,82 @@ L<Parse::Method::Signatures>
 
 L<Moose>
 
-=head1 AUTHOR
-
-Florian Ragwitz E<lt>rafl@debian.orgE<gt>
-
-With contributions from:
+=head1 AUTHORS
 
 =over 4
 
-=item Ash Berlin E<lt>ash@cpan.orgE<gt>
+=item *
 
-=item Cory Watson E<lt>gphat@cpan.orgE<gt>
+Florian Ragwitz <rafl@debian.org>
 
-=item Daniel Ruoso E<lt>daniel@ruoso.comE<gt>
+=item *
 
-=item Hakim Cassimally E<lt>hakim.cassimally@gmail.comE<gt>
+Ash Berlin <ash@cpan.org>
 
-=item Jonathan Scott Duff E<lt>duff@pobox.comE<gt>
+=item *
 
-=item Justin Hunter E<lt>justin.d.hunter@gmail.comE<gt>
+Cory Watson <gphat@cpan.org>
 
-=item Kent Fredric E<lt>kentfredric@gmail.comE<gt>
+=item *
 
-=item Maik Hentsche E<lt>maik.hentsche@amd.comE<gt>
+Daniel Ruoso <daniel@ruoso.com>
 
-=item Matt Kraai E<lt>kraai@ftbfs.orgE<gt>
+=item *
 
-=item Rhesa Rozendaal E<lt>rhesa@cpan.orgE<gt>
+Dave Rolsky <autarch@urth.org>
 
-=item Ricardo SIGNES E<lt>rjbs@cpan.orgE<gt>
+=item *
 
-=item Steffen Schwigon E<lt>ss5@renormalist.netE<gt>
+Hakim Cassimally <hakim.cassimally@gmail.com>
 
-=item Yanick Champoux E<lt>yanick@babyl.dyndns.orgE<gt>
+=item *
 
-=item Nicholas Perez E<lt>nperez@cpan.orgE<gt>
+Jonathan Scott Duff <duff@pobox.com>
+
+=item *
+
+Justin Hunter <justin.d.hunter@gmail.com>
+
+=item *
+
+Kent Fredric <kentfredric@gmail.com>
+
+=item *
+
+Maik Hentsche <maik.hentsche@amd.com>
+
+=item *
+
+Matt Kraai <kraai@ftbfs.org>
+
+=item *
+
+Rhesa Rozendaal <rhesa@cpan.org>
+
+=item *
+
+Ricardo SIGNES <rjbs@cpan.org>
+
+=item *
+
+Steffen Schwigon <ss5@renormalist.net>
+
+=item *
+
+Yanick Champoux <yanick@babyl.dyndns.org>
+
+=item *
+
+Nicholas Perez <nperez@cpan.org>
 
 =back
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2008, 2009  Florian Ragwitz
+This software is copyright (c) 2010 by Florian Ragwitz.
 
-Code based on the tests for L<Devel::Declare>.
-
-Documentation based on L<MooseX::Method> and L<Method::Signatures>.
-
-Licensed under the same terms as Perl itself.
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut
+

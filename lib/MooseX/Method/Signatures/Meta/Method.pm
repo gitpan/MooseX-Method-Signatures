@@ -1,9 +1,15 @@
 package MooseX::Method::Signatures::Meta::Method;
+BEGIN {
+  $MooseX::Method::Signatures::Meta::Method::AUTHORITY = 'cpan:FLORA';
+}
+BEGIN {
+  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.35';
+}
 
 use Moose;
 use Carp qw/cluck/;
 use Context::Preserve;
-use Parse::Method::Signatures;
+use Parse::Method::Signatures 1.003011;
 use Parse::Method::Signatures::TypeConstraint;
 use Scalar::Util qw/weaken/;
 use Moose::Util qw/does_role/;
@@ -231,7 +237,7 @@ sub _param_to_spec {
     if ($param->has_constraints) {
         my $cb = join ' && ', map { "sub {${_}}->(\\\@_)" } $param->constraints;
         my $code = eval "sub {${cb}}";
-        $tc = subtype($tc, $code);
+        $tc = subtype({ as => $tc, where => $code });
     }
 
     my %spec;
@@ -436,3 +442,92 @@ sub validate {
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+__END__
+=pod
+
+=encoding utf-8
+
+=head1 NAME
+
+MooseX::Method::Signatures::Meta::Method
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Florian Ragwitz <rafl@debian.org>
+
+=item *
+
+Ash Berlin <ash@cpan.org>
+
+=item *
+
+Cory Watson <gphat@cpan.org>
+
+=item *
+
+Daniel Ruoso <daniel@ruoso.com>
+
+=item *
+
+Dave Rolsky <autarch@urth.org>
+
+=item *
+
+Hakim Cassimally <hakim.cassimally@gmail.com>
+
+=item *
+
+Jonathan Scott Duff <duff@pobox.com>
+
+=item *
+
+Justin Hunter <justin.d.hunter@gmail.com>
+
+=item *
+
+Kent Fredric <kentfredric@gmail.com>
+
+=item *
+
+Maik Hentsche <maik.hentsche@amd.com>
+
+=item *
+
+Matt Kraai <kraai@ftbfs.org>
+
+=item *
+
+Rhesa Rozendaal <rhesa@cpan.org>
+
+=item *
+
+Ricardo SIGNES <rjbs@cpan.org>
+
+=item *
+
+Steffen Schwigon <ss5@renormalist.net>
+
+=item *
+
+Yanick Champoux <yanick@babyl.dyndns.org>
+
+=item *
+
+Nicholas Perez <nperez@cpan.org>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2010 by Florian Ragwitz.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+
