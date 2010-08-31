@@ -3,7 +3,7 @@ BEGIN {
   $MooseX::Method::Signatures::Meta::Method::AUTHORITY = 'cpan:FLORA';
 }
 BEGIN {
-  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.35';
+  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.36';
 }
 
 use Moose;

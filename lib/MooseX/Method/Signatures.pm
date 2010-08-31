@@ -6,7 +6,7 @@ BEGIN {
   $MooseX::Method::Signatures::AUTHORITY = 'cpan:FLORA';
 }
 BEGIN {
-  $MooseX::Method::Signatures::VERSION = '0.35';
+  $MooseX::Method::Signatures::VERSION = '0.36';
 }
 # ABSTRACT: Method declarations with type constraints and no source filter
 
@@ -14,7 +14,7 @@ use Moose 0.89;
 use Devel::Declare 0.005011 ();
 use B::Hooks::EndOfScope 0.07;
 use Moose::Meta::Class;
-use MooseX::LazyRequire 0.04;
+use MooseX::LazyRequire 0.06;
 use MooseX::Types::Moose 0.19 qw/Str Bool CodeRef/;
 use Text::Balanced qw/extract_quotelike/;
 use MooseX::Method::Signatures::Meta::Method;

@@ -39,7 +39,7 @@ my %WriteMakefileArgs = (
     'Moose::Meta::Method' => '0',
     'Moose::Util' => '0',
     'Moose::Util::TypeConstraints' => '0',
-    'MooseX::LazyRequire' => '0.04',
+    'MooseX::LazyRequire' => '0.06',
     'MooseX::Meta::TypeConstraint::ForceCoercion' => '0',
     'MooseX::Types' => '0.19',
     'MooseX::Types::Moose' => '0.19',
@@ -55,7 +55,7 @@ my %WriteMakefileArgs = (
     'aliased' => '0',
     'namespace::autoclean' => '0'
   },
-  'VERSION' => '0.35',
+  'VERSION' => '0.36',
   'test' => {
     'TESTS' => 't/*.t'
   }
