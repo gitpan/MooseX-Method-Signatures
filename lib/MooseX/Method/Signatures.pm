@@ -5,8 +5,8 @@ package MooseX::Method::Signatures;
 BEGIN {
   $MooseX::Method::Signatures::AUTHORITY = 'cpan:FLORA';
 }
-BEGIN {
-  $MooseX::Method::Signatures::VERSION = '0.36';
+{
+  $MooseX::Method::Signatures::VERSION = '0.37';
 }
 # ABSTRACT: Method declarations with type constraints and no source filter
 
@@ -164,6 +164,7 @@ sub strip_traits {
 
     # Let's check to make sure these traits aren't aliased locally
     for my $t (@traits) {
+        next if $t->[0] =~ /::/;
         my $class = $ctx->get_curstash_name;
         my $meta = Class::MOP::class_of($class) || Moose::Meta::Class->initialize($class);
         my $func = $meta->get_package_symbol('&' . $t->[0]);
@@ -692,7 +693,7 @@ Nicholas Perez <nperez@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Florian Ragwitz.
+This software is copyright (c) 2011 by Florian Ragwitz.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

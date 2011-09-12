@@ -2,14 +2,14 @@ package MooseX::Method::Signatures::Meta::Method;
 BEGIN {
   $MooseX::Method::Signatures::Meta::Method::AUTHORITY = 'cpan:FLORA';
 }
-BEGIN {
-  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.36';
+{
+  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.37';
 }
 
 use Moose;
 use Carp qw/cluck/;
 use Context::Preserve;
-use Parse::Method::Signatures 1.003011;
+use Parse::Method::Signatures 1.003014;
 use Parse::Method::Signatures::TypeConstraint;
 use Scalar::Util qw/weaken/;
 use Moose::Util qw/does_role/;
@@ -524,7 +524,7 @@ Nicholas Perez <nperez@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Florian Ragwitz.
+This software is copyright (c) 2011 by Florian Ragwitz.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

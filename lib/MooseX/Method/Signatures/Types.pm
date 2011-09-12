@@ -2,8 +2,8 @@ package MooseX::Method::Signatures::Types;
 BEGIN {
   $MooseX::Method::Signatures::Types::AUTHORITY = 'cpan:FLORA';
 }
-BEGIN {
-  $MooseX::Method::Signatures::Types::VERSION = '0.36';
+{
+  $MooseX::Method::Signatures::Types::VERSION = '0.37';
 }
 
 use MooseX::Types 0.19 -declare => [qw/ Injections PrototypeInjections Params /];
@@ -103,7 +103,7 @@ Nicholas Perez <nperez@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Florian Ragwitz.
+This software is copyright (c) 2011 by Florian Ragwitz.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
