@@ -3,7 +3,7 @@ BEGIN {
   $MooseX::Method::Signatures::Meta::Method::AUTHORITY = 'cpan:FLORA';
 }
 {
-  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.37';
+  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.38';
 }
 
 use Moose;
@@ -524,7 +524,7 @@ Nicholas Perez <nperez@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Florian Ragwitz.
+This software is copyright (c) 2012 by Florian Ragwitz.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

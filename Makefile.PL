@@ -32,11 +32,12 @@ my %WriteMakefileArgs = (
   "LICENSE" => "perl",
   "NAME" => "MooseX::Method::Signatures",
   "PREREQ_PM" => {
-    "B::Hooks::EndOfScope" => "0.07",
+    "B::Hooks::EndOfScope" => "0.10",
     "Carp" => 0,
     "Context::Preserve" => 0,
     "Devel::Declare" => "0.005011",
     "Devel::Declare::Context::Simple" => 0,
+    "Module::Runtime" => "0.012",
     "Moose" => "0.89",
     "Moose::Meta::Class" => 0,
     "Moose::Meta::Method" => 0,
@@ -62,7 +63,7 @@ my %WriteMakefileArgs = (
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "0.37",
+  "VERSION" => "0.38",
   "test" => {
     "TESTS" => "t/*.t"
   }

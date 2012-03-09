@@ -6,13 +6,13 @@ BEGIN {
   $MooseX::Method::Signatures::AUTHORITY = 'cpan:FLORA';
 }
 {
-  $MooseX::Method::Signatures::VERSION = '0.37';
+  $MooseX::Method::Signatures::VERSION = '0.38';
 }
 # ABSTRACT: Method declarations with type constraints and no source filter
 
 use Moose 0.89;
 use Devel::Declare 0.005011 ();
-use B::Hooks::EndOfScope 0.07;
+use B::Hooks::EndOfScope 0.10;
 use Moose::Meta::Class;
 use MooseX::LazyRequire 0.06;
 use MooseX::Types::Moose 0.19 qw/Str Bool CodeRef/;
@@ -693,7 +693,7 @@ Nicholas Perez <nperez@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Florian Ragwitz.
+This software is copyright (c) 2012 by Florian Ragwitz.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
