@@ -3,7 +3,7 @@ BEGIN {
   $MooseX::Method::Signatures::Types::AUTHORITY = 'cpan:FLORA';
 }
 {
-  $MooseX::Method::Signatures::Types::VERSION = '0.39';
+  $MooseX::Method::Signatures::Types::VERSION = '0.40';
 }
 
 use MooseX::Types 0.19 -declare => [qw/ Injections PrototypeInjections Params /];
