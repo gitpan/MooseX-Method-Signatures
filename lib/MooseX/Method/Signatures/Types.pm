@@ -3,12 +3,12 @@ BEGIN {
   $MooseX::Method::Signatures::Types::AUTHORITY = 'cpan:FLORA';
 }
 {
-  $MooseX::Method::Signatures::Types::VERSION = '0.38';
+  $MooseX::Method::Signatures::Types::VERSION = '0.39';
 }
 
 use MooseX::Types 0.19 -declare => [qw/ Injections PrototypeInjections Params /];
 use MooseX::Types::Moose qw/Str ArrayRef/;
-use MooseX::Types::Structured 0.20 qw/Dict/;
+use MooseX::Types::Structured 0.24 qw/Dict/;
 use Parse::Method::Signatures::Types qw/Param/;
 
 subtype Injections,
@@ -98,6 +98,10 @@ Yanick Champoux <yanick@babyl.dyndns.org>
 =item *
 
 Nicholas Perez <nperez@cpan.org>
+
+=item *
+
+Karen Etheridge <ether@cpan.org>
 
 =back
 

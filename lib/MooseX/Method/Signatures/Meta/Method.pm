@@ -3,7 +3,7 @@ BEGIN {
   $MooseX::Method::Signatures::Meta::Method::AUTHORITY = 'cpan:FLORA';
 }
 {
-  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.38';
+  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.39';
 }
 
 use Moose;
@@ -519,6 +519,10 @@ Yanick Champoux <yanick@babyl.dyndns.org>
 =item *
 
 Nicholas Perez <nperez@cpan.org>
+
+=item *
+
+Karen Etheridge <ether@cpan.org>
 
 =back
 

@@ -10,13 +10,15 @@ use ExtUtils::MakeMaker 6.30;
 
 my %WriteMakefileArgs = (
   "ABSTRACT" => "Method declarations with type constraints and no source filter",
-  "AUTHOR" => "Florian Ragwitz <rafl\@debian.org>, Ash Berlin <ash\@cpan.org>, Cory Watson <gphat\@cpan.org>, Daniel Ruoso <daniel\@ruoso.com>, Dave Rolsky <autarch\@urth.org>, Hakim Cassimally <hakim.cassimally\@gmail.com>, Jonathan Scott Duff <duff\@pobox.com>, Justin Hunter <justin.d.hunter\@gmail.com>, Kent Fredric <kentfredric\@gmail.com>, Maik Hentsche <maik.hentsche\@amd.com>, Matt Kraai <kraai\@ftbfs.org>, Rhesa Rozendaal <rhesa\@cpan.org>, Ricardo SIGNES <rjbs\@cpan.org>, Steffen Schwigon <ss5\@renormalist.net>, Yanick Champoux <yanick\@babyl.dyndns.org>, Nicholas Perez <nperez\@cpan.org>",
+  "AUTHOR" => "Florian Ragwitz <rafl\@debian.org>, Ash Berlin <ash\@cpan.org>, Cory Watson <gphat\@cpan.org>, Daniel Ruoso <daniel\@ruoso.com>, Dave Rolsky <autarch\@urth.org>, Hakim Cassimally <hakim.cassimally\@gmail.com>, Jonathan Scott Duff <duff\@pobox.com>, Justin Hunter <justin.d.hunter\@gmail.com>, Kent Fredric <kentfredric\@gmail.com>, Maik Hentsche <maik.hentsche\@amd.com>, Matt Kraai <kraai\@ftbfs.org>, Rhesa Rozendaal <rhesa\@cpan.org>, Ricardo SIGNES <rjbs\@cpan.org>, Steffen Schwigon <ss5\@renormalist.net>, Yanick Champoux <yanick\@babyl.dyndns.org>, Nicholas Perez <nperez\@cpan.org>, Karen Etheridge <ether\@cpan.org>",
   "BUILD_REQUIRES" => {
+    "Data::Dumper" => 0,
     "FindBin" => 0,
     "Moose::Role" => 0,
     "MooseX::Meta::Method::Authorized" => 0,
     "MooseX::Meta::Method::Transactional" => 0,
-    "Test::Exception" => 0,
+    "Test::Deep" => 0,
+    "Test::Fatal" => 0,
     "Test::Moose" => 0,
     "Test::More" => "0.89",
     "Test::Pod" => 0,
@@ -47,7 +49,7 @@ my %WriteMakefileArgs = (
     "MooseX::Meta::TypeConstraint::ForceCoercion" => 0,
     "MooseX::Types" => "0.19",
     "MooseX::Types::Moose" => "0.19",
-    "MooseX::Types::Structured" => "0.20",
+    "MooseX::Types::Structured" => "0.24",
     "MooseX::Types::Util" => 0,
     "Parse::Method::Signatures" => "1.003014",
     "Parse::Method::Signatures::Param::Named" => 0,
@@ -63,7 +65,7 @@ my %WriteMakefileArgs = (
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "0.38",
+  "VERSION" => "0.39",
   "test" => {
     "TESTS" => "t/*.t"
   }

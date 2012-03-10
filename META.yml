@@ -17,12 +17,15 @@ author:
   - 'Steffen Schwigon <ss5@renormalist.net>'
   - 'Yanick Champoux <yanick@babyl.dyndns.org>'
   - 'Nicholas Perez <nperez@cpan.org>'
+  - 'Karen Etheridge <ether@cpan.org>'
 build_requires:
+  Data::Dumper: 0
   FindBin: 0
   Moose::Role: 0
   MooseX::Meta::Method::Authorized: 0
   MooseX::Meta::Method::Transactional: 0
-  Test::Exception: 0
+  Test::Deep: 0
+  Test::Fatal: 0
   Test::Moose: 0
   Test::More: 0.89
   Test::Pod: 0
@@ -54,7 +57,7 @@ requires:
   MooseX::Meta::TypeConstraint::ForceCoercion: 0
   MooseX::Types: 0.19
   MooseX::Types::Moose: 0.19
-  MooseX::Types::Structured: 0.20
+  MooseX::Types::Structured: 0.24
   MooseX::Types::Util: 0
   Parse::Method::Signatures: 1.003014
   Parse::Method::Signatures::Param::Named: 0
@@ -72,8 +75,8 @@ requires:
 resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=MooseX-Method-Signatures
   homepage: http://metacpan.org/release/MooseX-Method-Signatures
-  repository: git://github.com/rafl/moosex-method-signatures.git
-version: 0.38
+  repository: git://github.com/karenetheridge/moosex-method-signatures.git
+version: 0.39
 x_Dist_Zilla:
   plugins:
     -

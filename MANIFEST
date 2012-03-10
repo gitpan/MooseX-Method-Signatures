@@ -49,4 +49,5 @@ t/traits.t
 t/type_alias.t
 t/types.t
 t/undef_method_arg.t
+t/undef_method_arg2.t
 t/where.t
