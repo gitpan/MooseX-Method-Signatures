@@ -39,6 +39,7 @@ my %WriteMakefileArgs = (
     "Context::Preserve" => 0,
     "Devel::Declare" => "0.005011",
     "Devel::Declare::Context::Simple" => 0,
+    "Eval::Closure" => 0,
     "Module::Runtime" => "0.012",
     "Moose" => "0.89",
     "Moose::Meta::Class" => 0,
@@ -65,7 +66,7 @@ my %WriteMakefileArgs = (
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "0.40",
+  "VERSION" => "0.41",
   "test" => {
     "TESTS" => "t/*.t"
   }
