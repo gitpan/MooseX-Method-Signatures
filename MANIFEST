@@ -9,6 +9,7 @@ dist.ini
 lib/MooseX/Method/Signatures.pm
 lib/MooseX/Method/Signatures/Meta/Method.pm
 lib/MooseX/Method/Signatures/Types.pm
+t/00-compile.t
 t/00-load.t
 t/attributes.t
 t/author-pod.t
@@ -36,7 +37,10 @@ t/no_signature.t
 t/placeholders.t
 t/precedence.t
 t/quoted_name.t
+t/release-changes_has_content.t
+t/release-cpan-changes.t
 t/release-eol.t
+t/release-minimum-version.t
 t/release-no-tabs.t
 t/release-pod-syntax.t
 t/return_value.t
