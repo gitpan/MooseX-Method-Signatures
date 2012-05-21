@@ -9,6 +9,7 @@ dist.ini
 lib/MooseX/Method/Signatures.pm
 lib/MooseX/Method/Signatures/Meta/Method.pm
 lib/MooseX/Method/Signatures/Types.pm
+t/00-check-deps.t
 t/00-compile.t
 t/00-load.t
 t/attributes.t

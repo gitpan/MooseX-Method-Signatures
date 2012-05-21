@@ -6,7 +6,7 @@ BEGIN {
   $MooseX::Method::Signatures::AUTHORITY = 'cpan:FLORA';
 }
 {
-  $MooseX::Method::Signatures::VERSION = '0.42';
+  $MooseX::Method::Signatures::VERSION = '0.43';
 }
 # ABSTRACT: Method declarations with type constraints and no source filter
 

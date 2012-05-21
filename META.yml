@@ -24,20 +24,18 @@ build_requires:
   File::Temp: 0
   FindBin: 0
   Moose::Role: 0
-  MooseX::Meta::Method::Authorized: 0
-  MooseX::Meta::Method::Transactional: 0
+  Test::CheckDeps: 0.002
   Test::Deep: 0
   Test::Fatal: 0
   Test::Moose: 0
   Test::More: 0.89
-  Test::Pod: 0
   attributes: 0
   metaclass: 0
   namespace::clean: 0
 configure_requires:
   ExtUtils::MakeMaker: 6.30
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.300014, CPAN::Meta::Converter version 2.120630'
+generated_by: 'Dist::Zilla version 4.300016, CPAN::Meta::Converter version 2.120921'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -58,7 +56,7 @@ requires:
   Moose::Util::TypeConstraints: 0
   MooseX::LazyRequire: 0.06
   MooseX::Meta::TypeConstraint::ForceCoercion: 0
-  MooseX::Types: 0.19
+  MooseX::Types: 0.35
   MooseX::Types::Moose: 0.19
   MooseX::Types::Structured: 0.24
   MooseX::Types::Util: 0
@@ -79,81 +77,81 @@ resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=MooseX-Method-Signatures
   homepage: http://metacpan.org/release/MooseX-Method-Signatures
   repository: git://github.com/karenetheridge/moosex-method-signatures.git
-version: 0.42
+version: 0.43
 x_Dist_Zilla:
   plugins:
     -
       class: Dist::Zilla::Plugin::GatherDir
       name: '@FLORA/@Basic/GatherDir'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::PruneCruft
       name: '@FLORA/@Basic/PruneCruft'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::ManifestSkip
       name: '@FLORA/@Basic/ManifestSkip'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::MetaYAML
       name: '@FLORA/@Basic/MetaYAML'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::License
       name: '@FLORA/@Basic/License'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::Readme
       name: '@FLORA/@Basic/Readme'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::ExtraTests
       name: '@FLORA/@Basic/ExtraTests'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::ExecDir
       name: '@FLORA/@Basic/ExecDir'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::ShareDir
       name: '@FLORA/@Basic/ShareDir'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::MakeMaker
       name: '@FLORA/@Basic/MakeMaker'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::Manifest
       name: '@FLORA/@Basic/Manifest'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::TestRelease
       name: '@FLORA/@Basic/TestRelease'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::ConfirmRelease
       name: '@FLORA/@Basic/ConfirmRelease'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::UploadToCPAN
       name: '@FLORA/@Basic/UploadToCPAN'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::MetaConfig
       name: '@FLORA/MetaConfig'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::MetaJSON
       name: '@FLORA/MetaJSON'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::PkgVersion
       name: '@FLORA/PkgVersion'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::PodSyntaxTests
       name: '@FLORA/PodSyntaxTests'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::NoTabsTests
       name: '@FLORA/NoTabsTests'
@@ -161,7 +159,7 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::MetaResources
       name: '@FLORA/MetaResources'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::Authority
       name: '@FLORA/Authority'
@@ -177,7 +175,7 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::AutoPrereqs
       name: '@FLORA/AutoPrereqs'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::Prereqs
       config:
@@ -185,7 +183,7 @@ x_Dist_Zilla:
           phase: runtime
           type: requires
       name: Prereqs
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::Git::NextVersion
       name: Git::NextVersion
@@ -207,6 +205,10 @@ x_Dist_Zilla:
       name: Test::ChangesHasContent
       version: 0.005
     -
+      class: Dist::Zilla::Plugin::Test::CheckDeps
+      name: Test::CheckDeps
+      version: 0.005
+    -
       class: Dist::Zilla::Plugin::Git::Remote::Check
       name: Git::Remote::Check
       version: 0.1.2
@@ -217,7 +219,7 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::NextRelease
       name: NextRelease
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::Git::Commit
       name: Git::Commit
@@ -233,30 +235,30 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':InstallModules'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':IncModules'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':TestFiles'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':ExecFiles'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':ShareFiles'
-      version: 4.300014
+      version: 4.300016
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':MainModule'
-      version: 4.300014
+      version: 4.300016
   zilla:
     class: Dist::Zilla::Dist::Builder
     config:
       is_trial: 0
-    version: 4.300014
+    version: 4.300016
 x_authority: cpan:FLORA

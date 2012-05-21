@@ -12,7 +12,7 @@ use Test::More tests => 2;
 
 note 'Checking Changes';
 my $changes_file = 'Changes';
-my $newver = '0.42';
+my $newver = '0.43';
 
 SKIP: {
     ok(-e $changes_file, "$changes_file file exists")
