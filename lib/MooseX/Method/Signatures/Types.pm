@@ -3,8 +3,9 @@ BEGIN {
   $MooseX::Method::Signatures::Types::AUTHORITY = 'cpan:FLORA';
 }
 {
-  $MooseX::Method::Signatures::Types::VERSION = '0.43';
+  $MooseX::Method::Signatures::Types::VERSION = '0.44';
 }
+#ABSTRACT: Provides common MooseX::Types used by MooseX::Method::Signatures
 
 use MooseX::Types 0.19 -declare => [qw/ Injections PrototypeInjections Params /];
 use MooseX::Types::Moose qw/Str ArrayRef/;
@@ -23,13 +24,14 @@ subtype Params,
 1;
 
 __END__
+
 =pod
 
 =encoding utf-8
 
 =head1 NAME
 
-MooseX::Method::Signatures::Types
+MooseX::Method::Signatures::Types - Provides common MooseX::Types used by MooseX::Method::Signatures
 
 =head1 AUTHORS
 
@@ -113,4 +115,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

@@ -2,11 +2,13 @@ use strict;
 use warnings;
 
 package MooseX::Method::Signatures;
+# git description: v0.43-20-gca043b4
+
 BEGIN {
   $MooseX::Method::Signatures::AUTHORITY = 'cpan:FLORA';
 }
 {
-  $MooseX::Method::Signatures::VERSION = '0.43';
+  $MooseX::Method::Signatures::VERSION = '0.44';
 }
 # ABSTRACT: Method declarations with type constraints and no source filter
 
@@ -349,8 +351,8 @@ __PACKAGE__->meta->make_immutable;
 
 1;
 
-
 __END__
+
 =pod
 
 =encoding utf-8
@@ -613,13 +615,13 @@ L<Method::Signatures::Simple>
 
 L<Method::Signatures>
 
-L<Perl6::Subs>
-
 L<Devel::Declare>
 
 L<Parse::Method::Signatures>
 
 L<Moose>
+
+L<signatures>
 
 =head1 AUTHORS
 
@@ -703,4 +705,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

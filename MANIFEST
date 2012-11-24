@@ -1,4 +1,5 @@
 Changes
+INSTALL
 LICENSE
 MANIFEST
 META.json
@@ -40,9 +41,12 @@ t/precedence.t
 t/quoted_name.t
 t/release-changes_has_content.t
 t/release-cpan-changes.t
+t/release-distmeta.t
 t/release-eol.t
 t/release-minimum-version.t
 t/release-no-tabs.t
+t/release-pod-linkcheck.t
+t/release-pod-no404s.t
 t/release-pod-syntax.t
 t/return_value.t
 t/signatures.t

@@ -3,8 +3,9 @@ BEGIN {
   $MooseX::Method::Signatures::Meta::Method::AUTHORITY = 'cpan:FLORA';
 }
 {
-  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.43';
+  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.44';
 }
+# ABSTRACT: Provides the metaclass for methods with signatures
 
 use Moose;
 use Carp qw/cluck/;
@@ -354,7 +355,7 @@ sub _build__named_args {
     my @named;
 
     if ($sig->has_named_params) {
-        confess 'Named parameters can not be combined with slurpy positionals'
+        confess 'Named parameters cannot be combined with slurpy positionals'
             if $self->_has_slurpy_positional;
         for my $param ($sig->named_params) {
             push @named, $param->label => $self->_param_to_spec($param);
@@ -444,13 +445,14 @@ __PACKAGE__->meta->make_immutable;
 1;
 
 __END__
+
 =pod
 
 =encoding utf-8
 
 =head1 NAME
 
-MooseX::Method::Signatures::Meta::Method
+MooseX::Method::Signatures::Meta::Method - Provides the metaclass for methods with signatures
 
 =head1 AUTHORS
 
@@ -534,4 +536,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
