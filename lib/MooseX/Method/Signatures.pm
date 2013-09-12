@@ -2,14 +2,14 @@ use strict;
 use warnings;
 
 package MooseX::Method::Signatures;
-# git description: v0.43-20-gca043b4
-
 BEGIN {
-  $MooseX::Method::Signatures::AUTHORITY = 'cpan:FLORA';
+  $MooseX::Method::Signatures::AUTHORITY = 'cpan:ETHER';
 }
 {
-  $MooseX::Method::Signatures::VERSION = '0.44';
+  $MooseX::Method::Signatures::VERSION = '0.45';
 }
+# git description: v0.44-14-g9a2ba44
+
 # ABSTRACT: Method declarations with type constraints and no source filter
 
 use Moose 0.89;
@@ -22,6 +22,8 @@ use Text::Balanced qw/extract_quotelike/;
 use MooseX::Method::Signatures::Meta::Method;
 use MooseX::Method::Signatures::Types qw/PrototypeInjections/;
 use Sub::Name;
+use Moose::Util 'find_meta';
+use Module::Runtime 'use_module';
 use Carp;
 
 use aliased 'Devel::Declare::Context::Simple', 'ContextSimple';
@@ -168,7 +170,7 @@ sub strip_traits {
     for my $t (@traits) {
         next if $t->[0] =~ /::/;
         my $class = $ctx->get_curstash_name;
-        my $meta = Class::MOP::class_of($class) || Moose::Meta::Class->initialize($class);
+        my $meta = find_meta($class) || Moose::Meta::Class->initialize($class);
         my $func = $meta->get_package_symbol('&' . $t->[0]);
         next unless $func;
 
@@ -243,7 +245,7 @@ sub _parser {
     if ($args{traits}) {
         my @traits = ();
         foreach my $t (@{$args{traits}}) {
-            Class::MOP::load_class($t->[0]);
+            use_module($t->[0]);
             if ($t->[1]) {
                 %args = (%args, eval $t->[1]);
             };
@@ -355,11 +357,13 @@ __END__
 
 =pod
 
-=encoding utf-8
-
 =head1 NAME
 
 MooseX::Method::Signatures - Method declarations with type constraints and no source filter
+
+=head1 VERSION
+
+version 0.45
 
 =head1 SYNOPSIS
 
@@ -434,6 +438,8 @@ signature syntax is supported yet and some of it never will be.
 
     method foo ($foo where { $_ % 2 == 0 }) # only even
 
+=for stopwords Invocant
+
 =head2 Invocant
 
     method foo (        $moo) # invocant is called $self and is required
@@ -458,7 +464,9 @@ constraint.
 
     method foo ($bar, $, $baz)
 
-Sometimes you don't care about some params you're being called with. Just put
+=for stopwords sigil
+
+Sometimes you don't care about some parameters you're being called with. Just put
 the bare sigil instead of a full variable name into the signature to avoid an
 extra lexical variable to be created.
 
@@ -607,6 +615,10 @@ make sure that your C<with> declaration happens after any
 method/subroutine declarations that may have the same name as a
 method/subroutine within a role.
 
+=head1 CAVEATS
+
+You are encouraged to read the L<MooseX::Declare/WARNING>.
+
 =head1 SEE ALSO
 
 L<MooseX::Declare>
@@ -623,83 +635,13 @@ L<Moose>
 
 L<signatures>
 
-=head1 AUTHORS
-
-=over 4
-
-=item *
+=head1 AUTHOR
 
 Florian Ragwitz <rafl@debian.org>
 
-=item *
-
-Ash Berlin <ash@cpan.org>
-
-=item *
-
-Cory Watson <gphat@cpan.org>
-
-=item *
-
-Daniel Ruoso <daniel@ruoso.com>
-
-=item *
-
-Dave Rolsky <autarch@urth.org>
-
-=item *
-
-Hakim Cassimally <hakim.cassimally@gmail.com>
-
-=item *
-
-Jonathan Scott Duff <duff@pobox.com>
-
-=item *
-
-Justin Hunter <justin.d.hunter@gmail.com>
-
-=item *
-
-Kent Fredric <kentfredric@gmail.com>
-
-=item *
-
-Maik Hentsche <maik.hentsche@amd.com>
-
-=item *
-
-Matt Kraai <kraai@ftbfs.org>
-
-=item *
-
-Rhesa Rozendaal <rhesa@cpan.org>
-
-=item *
-
-Ricardo SIGNES <rjbs@cpan.org>
-
-=item *
-
-Steffen Schwigon <ss5@renormalist.net>
-
-=item *
-
-Yanick Champoux <yanick@babyl.dyndns.org>
-
-=item *
-
-Nicholas Perez <nperez@cpan.org>
-
-=item *
-
-Karen Etheridge <ether@cpan.org>
-
-=back
-
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Florian Ragwitz.
+This software is copyright (c) 2013 by Florian Ragwitz.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

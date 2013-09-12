@@ -1,9 +1,9 @@
 package MooseX::Method::Signatures::Meta::Method;
 BEGIN {
-  $MooseX::Method::Signatures::Meta::Method::AUTHORITY = 'cpan:FLORA';
+  $MooseX::Method::Signatures::Meta::Method::AUTHORITY = 'cpan:ETHER';
 }
 {
-  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.44';
+  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.45';
 }
 # ABSTRACT: Provides the metaclass for methods with signatures
 
@@ -442,95 +442,30 @@ sub validate {
 
 __PACKAGE__->meta->make_immutable;
 
+
 1;
 
 __END__
 
 =pod
 
-=encoding utf-8
-
 =head1 NAME
 
 MooseX::Method::Signatures::Meta::Method - Provides the metaclass for methods with signatures
 
-=head1 AUTHORS
+=head1 VERSION
 
-=over 4
+version 0.45
 
-=item *
+=for stopwords metaclass
+
+=head1 AUTHOR
 
 Florian Ragwitz <rafl@debian.org>
 
-=item *
-
-Ash Berlin <ash@cpan.org>
-
-=item *
-
-Cory Watson <gphat@cpan.org>
-
-=item *
-
-Daniel Ruoso <daniel@ruoso.com>
-
-=item *
-
-Dave Rolsky <autarch@urth.org>
-
-=item *
-
-Hakim Cassimally <hakim.cassimally@gmail.com>
-
-=item *
-
-Jonathan Scott Duff <duff@pobox.com>
-
-=item *
-
-Justin Hunter <justin.d.hunter@gmail.com>
-
-=item *
-
-Kent Fredric <kentfredric@gmail.com>
-
-=item *
-
-Maik Hentsche <maik.hentsche@amd.com>
-
-=item *
-
-Matt Kraai <kraai@ftbfs.org>
-
-=item *
-
-Rhesa Rozendaal <rhesa@cpan.org>
-
-=item *
-
-Ricardo SIGNES <rjbs@cpan.org>
-
-=item *
-
-Steffen Schwigon <ss5@renormalist.net>
-
-=item *
-
-Yanick Champoux <yanick@babyl.dyndns.org>
-
-=item *
-
-Nicholas Perez <nperez@cpan.org>
-
-=item *
-
-Karen Etheridge <ether@cpan.org>
-
-=back
-
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Florian Ragwitz.
+This software is copyright (c) 2013 by Florian Ragwitz.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
