@@ -3,7 +3,7 @@ BEGIN {
   $MooseX::Method::Signatures::Meta::Method::AUTHORITY = 'cpan:ETHER';
 }
 {
-  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.45';
+  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.46';
 }
 # ABSTRACT: Provides the metaclass for methods with signatures
 
@@ -449,15 +449,17 @@ __END__
 
 =pod
 
+=encoding ISO-8859-1
+
+=for :stopwords Florian Ragwitz metaclass
+
 =head1 NAME
 
 MooseX::Method::Signatures::Meta::Method - Provides the metaclass for methods with signatures
 
 =head1 VERSION
 
-version 0.45
-
-=for stopwords metaclass
+version 0.46
 
 =head1 AUTHOR
 

@@ -3,7 +3,7 @@ BEGIN {
   $MooseX::Method::Signatures::Types::AUTHORITY = 'cpan:ETHER';
 }
 {
-  $MooseX::Method::Signatures::Types::VERSION = '0.45';
+  $MooseX::Method::Signatures::Types::VERSION = '0.46';
 }
 #ABSTRACT: Provides common MooseX::Types used by MooseX::Method::Signatures
 
@@ -27,13 +27,21 @@ __END__
 
 =pod
 
+=encoding ISO-8859-1
+
+=for :stopwords Florian Ragwitz Ash Rolsky Hakim Cassimally Jesse Luehrs Jonathan Rockway
+Scott Duff Justin Berlin Hunter Karen Etheridge Kent Fredric Lukas Mai Maik
+Hentsche Matt Cory Kraai Nicholas Perez Rhesa Rozendaal Ricardo SIGNES
+Sebastian Willert Steffen Watson Schwigon Yanick Champoux Dagfinn Ilmari
+Mannsåker Daniel Ruoso Dave
+
 =head1 NAME
 
 MooseX::Method::Signatures::Types - Provides common MooseX::Types used by MooseX::Method::Signatures
 
 =head1 VERSION
 
-version 0.45
+version 0.46
 
 =head1 AUTHOR
 

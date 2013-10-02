@@ -31,7 +31,7 @@ Rolsky
 autarch
 Hakim
 Cassimally
-hakim
+osfameron
 Jesse
 Luehrs
 doy
@@ -77,7 +77,6 @@ ss5
 Yanick
 Champoux
 yanick
-arcanez
 lib
 MooseX
 Method

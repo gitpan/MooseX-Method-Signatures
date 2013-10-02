@@ -6,9 +6,9 @@ BEGIN {
   $MooseX::Method::Signatures::AUTHORITY = 'cpan:ETHER';
 }
 {
-  $MooseX::Method::Signatures::VERSION = '0.45';
+  $MooseX::Method::Signatures::VERSION = '0.46';
 }
-# git description: v0.44-14-g9a2ba44
+# git description: v0.45-5-gcb8011c
 
 # ABSTRACT: Method declarations with type constraints and no source filter
 
@@ -357,13 +357,21 @@ __END__
 
 =pod
 
+=encoding ISO-8859-1
+
+=for :stopwords Florian Ragwitz Ash Rolsky Hakim Cassimally Jesse Luehrs Jonathan Rockway
+Scott Duff Justin Berlin Hunter Karen Etheridge Kent Fredric Lukas Mai Maik
+Hentsche Matt Cory Kraai Nicholas Perez Rhesa Rozendaal Ricardo SIGNES
+Sebastian Willert Steffen Watson Schwigon Yanick Champoux Dagfinn Ilmari
+Mannsåker Daniel Ruoso Dave Invocant sigil
+
 =head1 NAME
 
 MooseX::Method::Signatures - Method declarations with type constraints and no source filter
 
 =head1 VERSION
 
-version 0.45
+version 0.46
 
 =head1 SYNOPSIS
 
@@ -438,8 +446,6 @@ signature syntax is supported yet and some of it never will be.
 
     method foo ($foo where { $_ % 2 == 0 }) # only even
 
-=for stopwords Invocant
-
 =head2 Invocant
 
     method foo (        $moo) # invocant is called $self and is required
@@ -463,8 +469,6 @@ constraint.
 =head2 Placeholders
 
     method foo ($bar, $, $baz)
-
-=for stopwords sigil
 
 Sometimes you don't care about some parameters you're being called with. Just put
 the bare sigil instead of a full variable name into the signature to avoid an
@@ -645,5 +649,95 @@ This software is copyright (c) 2013 by Florian Ragwitz.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
+
+=head1 CONTRIBUTORS
+
+=over 4
+
+=item *
+
+Ash Berlin <ash@cpan.org>
+
+=item *
+
+Cory Watson <gphat@cpan.org>
+
+=item *
+
+Dagfinn Ilmari Mannsåker <ilmari@ilmari.org>
+
+=item *
+
+Daniel Ruoso <daniel@ruoso.com>
+
+=item *
+
+Dave Rolsky <autarch@urth.org>
+
+=item *
+
+Hakim Cassimally <osfameron@cpan.org>
+
+=item *
+
+Jesse Luehrs <doy@tozt.net>
+
+=item *
+
+Jonathan Rockway <jon@jrock.us>
+
+=item *
+
+Jonathan Scott Duff <duff@pobox.com>
+
+=item *
+
+Justin Hunter <justin.d.hunter@gmail.com>
+
+=item *
+
+Karen Etheridge <ether@cpan.org>
+
+=item *
+
+Kent Fredric <kentfredric@gmail.com>
+
+=item *
+
+Lukas Mai <l.mai@web.de>
+
+=item *
+
+Maik Hentsche <maik.hentsche@amd.com>
+
+=item *
+
+Matt Kraai <kraai@ftbfs.org>
+
+=item *
+
+Nicholas Perez <nperez@cpan.org>
+
+=item *
+
+Rhesa Rozendaal <rhesa@cpan.org>
+
+=item *
+
+Ricardo SIGNES <rjbs@cpan.org>
+
+=item *
+
+Sebastian Willert <willert@cpan.org>
+
+=item *
+
+Steffen Schwigon <ss5@renormalist.net>
+
+=item *
+
+Yanick Champoux <yanick@babyl.dyndns.org>
+
+=back
 
 =cut

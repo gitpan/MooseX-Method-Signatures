@@ -5,6 +5,7 @@ LICENSE
 MANIFEST
 META.json
 META.yml
+Makefile.PL
 README
 dist.ini
 lib/MooseX/Method/Signatures.pm
@@ -13,6 +14,7 @@ lib/MooseX/Method/Signatures/Types.pm
 t/00-check-deps.t
 t/00-compile.t
 t/00-load.t
+t/00-report-prereqs.t
 t/attributes.t
 t/basic.t
 t/caller.t
@@ -49,6 +51,7 @@ t/types.t
 t/undef_method_arg.t
 t/undef_method_arg2.t
 t/where.t
+weaver.ini
 xt/author/pod-spell.t
 xt/author/pod.t
 xt/author/transactional-authorized.t
