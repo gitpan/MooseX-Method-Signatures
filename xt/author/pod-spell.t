@@ -21,7 +21,7 @@ Watson
 gphat
 Dagfinn
 Ilmari
-Mannsåker
+MannsÃ¥ker
 ilmari
 Daniel
 Ruoso

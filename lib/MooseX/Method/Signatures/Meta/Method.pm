@@ -1,9 +1,9 @@
 package MooseX::Method::Signatures::Meta::Method;
+{
+  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.47';
+}
 BEGIN {
   $MooseX::Method::Signatures::Meta::Method::AUTHORITY = 'cpan:ETHER';
-}
-{
-  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.46';
 }
 # ABSTRACT: Provides the metaclass for methods with signatures
 
@@ -449,7 +449,7 @@ __END__
 
 =pod
 
-=encoding ISO-8859-1
+=encoding UTF-8
 
 =for :stopwords Florian Ragwitz metaclass
 
@@ -459,7 +459,7 @@ MooseX::Method::Signatures::Meta::Method - Provides the metaclass for methods wi
 
 =head1 VERSION
 
-version 0.46
+version 0.47
 
 =head1 AUTHOR
 

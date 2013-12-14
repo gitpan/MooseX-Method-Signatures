@@ -2,14 +2,14 @@ use strict;
 use warnings;
 
 package MooseX::Method::Signatures;
+{
+  $MooseX::Method::Signatures::VERSION = '0.47';
+}
+# git description: v0.46-8-ga38401b
+
 BEGIN {
   $MooseX::Method::Signatures::AUTHORITY = 'cpan:ETHER';
 }
-{
-  $MooseX::Method::Signatures::VERSION = '0.46';
-}
-# git description: v0.45-5-gcb8011c
-
 # ABSTRACT: Method declarations with type constraints and no source filter
 
 use Moose 0.89;
@@ -357,13 +357,13 @@ __END__
 
 =pod
 
-=encoding ISO-8859-1
+=encoding UTF-8
 
 =for :stopwords Florian Ragwitz Ash Rolsky Hakim Cassimally Jesse Luehrs Jonathan Rockway
 Scott Duff Justin Berlin Hunter Karen Etheridge Kent Fredric Lukas Mai Maik
 Hentsche Matt Cory Kraai Nicholas Perez Rhesa Rozendaal Ricardo SIGNES
 Sebastian Willert Steffen Watson Schwigon Yanick Champoux Dagfinn Ilmari
-Mannsåker Daniel Ruoso Dave Invocant sigil
+MannsÃ¥ker Daniel Ruoso Dave Invocant sigil
 
 =head1 NAME
 
@@ -371,7 +371,7 @@ MooseX::Method::Signatures - Method declarations with type constraints and no so
 
 =head1 VERSION
 
-version 0.46
+version 0.47
 
 =head1 SYNOPSIS
 
@@ -664,7 +664,7 @@ Cory Watson <gphat@cpan.org>
 
 =item *
 
-Dagfinn Ilmari Mannsåker <ilmari@ilmari.org>
+Dagfinn Ilmari MannsÃ¥ker <ilmari@ilmari.org>
 
 =item *
 
