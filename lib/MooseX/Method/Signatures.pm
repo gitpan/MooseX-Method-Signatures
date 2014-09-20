@@ -2,15 +2,10 @@ use strict;
 use warnings;
 
 package MooseX::Method::Signatures;
-{
-  $MooseX::Method::Signatures::VERSION = '0.47';
-}
-# git description: v0.46-8-ga38401b
-
-BEGIN {
-  $MooseX::Method::Signatures::AUTHORITY = 'cpan:ETHER';
-}
-# ABSTRACT: Method declarations with type constraints and no source filter
+# git description: v0.47-12-g2cd3471
+$MooseX::Method::Signatures::VERSION = '0.48';
+# ABSTRACT: DEPRECATED: Method declarations with type constraints and no source filter
+# KEYWORDS: moose extension method declaration signature prototype syntax sugar deprecated
 
 use Moose 0.89;
 use Devel::Declare 0.005011 ();
@@ -359,19 +354,13 @@ __END__
 
 =encoding UTF-8
 
-=for :stopwords Florian Ragwitz Ash Rolsky Hakim Cassimally Jesse Luehrs Jonathan Rockway
-Scott Duff Justin Berlin Hunter Karen Etheridge Kent Fredric Lukas Mai Maik
-Hentsche Matt Cory Kraai Nicholas Perez Rhesa Rozendaal Ricardo SIGNES
-Sebastian Willert Steffen Watson Schwigon Yanick Champoux Dagfinn Ilmari
-Mannsåker Daniel Ruoso Dave Invocant sigil
-
 =head1 NAME
 
-MooseX::Method::Signatures - Method declarations with type constraints and no source filter
+MooseX::Method::Signatures - DEPRECATED: Method declarations with type constraints and no source filter
 
 =head1 VERSION
 
-version 0.47
+version 0.48
 
 =head1 SYNOPSIS
 
@@ -446,6 +435,8 @@ signature syntax is supported yet and some of it never will be.
 
     method foo ($foo where { $_ % 2 == 0 }) # only even
 
+=for stopwords Invocant
+
 =head2 Invocant
 
     method foo (        $moo) # invocant is called $self and is required
@@ -469,6 +460,8 @@ constraint.
 =head2 Placeholders
 
     method foo ($bar, $, $baz)
+
+=for stopwords sigil
 
 Sometimes you don't care about some parameters you're being called with. Just put
 the bare sigil instead of a full variable name into the signature to avoid an
@@ -619,25 +612,59 @@ make sure that your C<with> declaration happens after any
 method/subroutine declarations that may have the same name as a
 method/subroutine within a role.
 
-=head1 CAVEATS
+=head1 WARNING
 
-You are encouraged to read the L<MooseX::Declare/WARNING>.
+=for stopwords mst
+
+=for comment rafl agreed we should have a warning, and mst wrote this for MooseX::Declare, but it applies equally well here:
+
+B<Warning:> MooseX::Method::Signatures and L<MooseX::Declare> are based on
+L<Devel::Declare>, a giant bag of crack originally implemented by mst with the
+goal of upsetting the perl core developers so much by its very existence that
+they implemented proper keyword handling in the core.
+
+As of perl5 version 14, this goal has been achieved, and modules such as
+L<Devel::CallParser>, L<Function::Parameters>, and L<Keyword::Simple> provide
+mechanisms to mangle perl syntax that don't require hallucinogenic drugs to
+interpret the error messages they produce.
+
+If you want to use declarative syntax in new code, please for the love
+of kittens get yourself a recent perl and look at L<Moops> and
+L<core signatures|perlsub/Signatures> instead.
 
 =head1 SEE ALSO
 
+=over 4
+
+=item *
+
 L<MooseX::Declare>
+
+=item *
 
 L<Method::Signatures::Simple>
 
+=item *
+
 L<Method::Signatures>
+
+=item *
 
 L<Devel::Declare>
 
+=item *
+
 L<Parse::Method::Signatures>
+
+=item *
 
 L<Moose>
 
+=item *
+
 L<signatures>
+
+=back
 
 =head1 AUTHOR
 
@@ -645,14 +672,20 @@ Florian Ragwitz <rafl@debian.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Florian Ragwitz.
+This software is copyright (c) 2014 by Florian Ragwitz.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =head1 CONTRIBUTORS
 
+=for stopwords Karen Etheridge Ash Berlin Daniel Ruoso Nicholas Perez Yanick Champoux Cory Watson Justin Hunter Rhesa Rozendaal Hakim Cassimally Kent Fredric Lukas Mai Dagfinn Ilmari Mannsåker Matt Kraai Ricardo SIGNES Steffen Schwigon Dave Rolsky Jesse Luehrs Jonathan Rockway Scott Duff Maik Hentsche Sebastian Willert
+
 =over 4
+
+=item *
+
+Karen Etheridge <ether@cpan.org>
 
 =item *
 
@@ -660,7 +693,39 @@ Ash Berlin <ash@cpan.org>
 
 =item *
 
+Daniel Ruoso <daniel@ruoso.com>
+
+=item *
+
+Nicholas Perez <nperez@cpan.org>
+
+=item *
+
+Yanick Champoux <yanick@babyl.dyndns.org>
+
+=item *
+
 Cory Watson <gphat@cpan.org>
+
+=item *
+
+Justin Hunter <justin.d.hunter@gmail.com>
+
+=item *
+
+Rhesa Rozendaal <rhesa@cpan.org>
+
+=item *
+
+Hakim Cassimally <osfameron@cpan.org>
+
+=item *
+
+Kent Fredric <kentfredric@gmail.com>
+
+=item *
+
+Lukas Mai <l.mai@web.de>
 
 =item *
 
@@ -668,15 +733,19 @@ Dagfinn Ilmari Mannsåker <ilmari@ilmari.org>
 
 =item *
 
-Daniel Ruoso <daniel@ruoso.com>
+Matt Kraai <kraai@ftbfs.org>
+
+=item *
+
+Ricardo SIGNES <rjbs@cpan.org>
+
+=item *
+
+Steffen Schwigon <ss5@renormalist.net>
 
 =item *
 
 Dave Rolsky <autarch@urth.org>
-
-=item *
-
-Hakim Cassimally <osfameron@cpan.org>
 
 =item *
 
@@ -692,51 +761,11 @@ Jonathan Scott Duff <duff@pobox.com>
 
 =item *
 
-Justin Hunter <justin.d.hunter@gmail.com>
-
-=item *
-
-Karen Etheridge <ether@cpan.org>
-
-=item *
-
-Kent Fredric <kentfredric@gmail.com>
-
-=item *
-
-Lukas Mai <l.mai@web.de>
-
-=item *
-
 Maik Hentsche <maik.hentsche@amd.com>
 
 =item *
 
-Matt Kraai <kraai@ftbfs.org>
-
-=item *
-
-Nicholas Perez <nperez@cpan.org>
-
-=item *
-
-Rhesa Rozendaal <rhesa@cpan.org>
-
-=item *
-
-Ricardo SIGNES <rjbs@cpan.org>
-
-=item *
-
 Sebastian Willert <willert@cpan.org>
-
-=item *
-
-Steffen Schwigon <ss5@renormalist.net>
-
-=item *
-
-Yanick Champoux <yanick@babyl.dyndns.org>
 
 =back
 

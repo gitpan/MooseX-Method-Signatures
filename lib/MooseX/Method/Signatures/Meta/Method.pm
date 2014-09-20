@@ -1,12 +1,6 @@
 package MooseX::Method::Signatures::Meta::Method;
-{
-  $MooseX::Method::Signatures::Meta::Method::VERSION = '0.47';
-}
-BEGIN {
-  $MooseX::Method::Signatures::Meta::Method::AUTHORITY = 'cpan:ETHER';
-}
 # ABSTRACT: Provides the metaclass for methods with signatures
-
+$MooseX::Method::Signatures::Meta::Method::VERSION = '0.48';
 use Moose;
 use Carp qw/cluck/;
 use Context::Preserve;
@@ -442,6 +436,11 @@ sub validate {
 
 __PACKAGE__->meta->make_immutable;
 
+#pod =pod
+#pod
+#pod =for stopwords metaclass
+#pod
+#pod =cut
 
 1;
 
@@ -451,15 +450,15 @@ __END__
 
 =encoding UTF-8
 
-=for :stopwords Florian Ragwitz metaclass
-
 =head1 NAME
 
 MooseX::Method::Signatures::Meta::Method - Provides the metaclass for methods with signatures
 
 =head1 VERSION
 
-version 0.47
+version 0.48
+
+=for stopwords metaclass
 
 =head1 AUTHOR
 
@@ -467,7 +466,7 @@ Florian Ragwitz <rafl@debian.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Florian Ragwitz.
+This software is copyright (c) 2014 by Florian Ragwitz.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
